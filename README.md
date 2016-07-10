@@ -1,4 +1,5 @@
-**Please read [wiki](https://github.com/tommai78101/homebrew/wiki) to see past progress.**
+**Please read [wiki](https://github.com/tommai78101/homebrew/wiki) to see past progress and more information about this project.**   
+**Everything uses open-source libraries to develop applications for Citra 3DS emulator, which is also open-source.**   
 
 # Homebrew
 
