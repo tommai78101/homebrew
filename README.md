@@ -15,9 +15,12 @@ Since the Makefile is a bit customized, here is a table for specific `make` comm
 |Make commands|Action|
 |---|---|
 |make all|Generates 3DSX and SMDH files.|
-|make cia|Generates 3DSX, CIA, and SMDH files. (You require `makerom`)|
-|make sideload|Generates 3DSX file, then netloads to your Nintendo 3DS device. (You require Homebrew Launcher v1.1.0)|
-|make citra|Generates 3DSX file, then launches the application via Citra emulator (Make sure to change filepath in Makefile.)|
+|make cia|Generates 3DSX, CIA, and SMDH files.     
+(Requires `makerom`)|
+|make sideload|Generates 3DSX file, then netloads to your Nintendo 3DS device.     
+(Requires Homebrew Launcher v1.1.0)|
+|make citra|Generates 3DSX file, then launches the application via Citra emulator    
+(Make sure to change filepath in Makefile.)|
 
 
 ### Results
