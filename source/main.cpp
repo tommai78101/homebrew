@@ -5,17 +5,35 @@ int main() {
 	PrintConsole bottomScreen;
 	consoleSelect(consoleInit(GFX_BOTTOM, &bottomScreen));
 	
-	text(0, 0, "This is the bottom screen.");
-	text(1, 0, "Press START to exit.");
+	Output output;
+	Engine::Core core(&output);
+	int count = 0;
 	
-	Engine::Core core;
+	output.print("Press A to send dummy messages.");
+	output.print("Press B to reverse output logs.");
+	output.print("Press START to quit.");
+	output.print(" ");
 	
 	while (aptMainLoop()){
 		hidScanInput();
-		if (hidKeysDown() & KEY_START){
+		u32 downEvent = hidKeysDown();
+		u32 heldEvent = hidKeysHeld();
+		if ((downEvent & KEY_START) || (heldEvent & KEY_START)){
 			break;
 		}
-		
+		else if ((downEvent & KEY_A) || (heldEvent & KEY_A)){
+			count++;
+			std::stringstream s;
+			s << "Hello world. Count: " << count;
+			output.print(s.str());
+		}
+		else if (downEvent & KEY_B){;
+			output.setReverseFlag(!output.getReverseFlag());
+			std::stringstream s;
+			s << "Reversing output direction to " << (output.getReverseFlag() == 1 ? "TRUE" : "FALSE") << ".";
+			output.print(s.str());
+			output.printAll();
+		}
 		gspWaitForVBlank();
 	}
 	
