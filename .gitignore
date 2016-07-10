@@ -2,3 +2,5 @@
 *.elf
 *.3dsx
 *.smdh
+.cproject
+.project
