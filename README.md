@@ -6,7 +6,19 @@ This project uses Eclipse C/C++ for homebrew application development, and Citra 
 
 ### Purpose
 
-Get the Console to be functional in 2 orientations, forward and reverse.
+Display working 3D cube model, with the flexible Console outputs still enabled. Core engine is now running perfectly fine.
+
+### Results
+
+Citra 3DS Qt result:
+
+![](http://i.imgur.com/Ai8Uvxt.png)
+
+### Known Issue
+
+* Do not run with citra.exe (Non-Qt build).
+
+![](http://i.imgur.com/fIGscMk.png)
 
 ### Building
 
@@ -19,13 +31,3 @@ Since the Makefile is a bit customized, here is a table for specific `make` comm
 |make sideload|Generates 3DSX file, then netloads to your Nintendo 3DS device.|Requires Homebrew Launcher v1.1.0|
 |make citra|Generates 3DSX file, then launches the application via Citra emulator.|Requires Citra 3DS emulator. Make sure to change filepath in Makefile.|
 
-
-### Results
-
-Forward Orientation:
-
-![](http://i.imgur.com/gz15sh3.png)
-
-Reverse Orientation:
-
-![](http://i.imgur.com/10rw5QP.png)
