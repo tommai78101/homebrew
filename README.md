@@ -1,3 +1,5 @@
+**Please read [wiki](https://github.com/tommai78101/homebrew/wiki) to see past progress.**
+
 # Homebrew
 
 Testing homebrew stuffs.
