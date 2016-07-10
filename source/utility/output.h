@@ -7,7 +7,7 @@
 
 static const int OUTPUT_MAX_ROW = 29;
 
-static inline std::string text(int row, int column, std::string message, u8 color = 37) {
+static inline std::string text(int row, int column, std::string message, u16 color = 37) {
 	std::stringstream ss;
 	ss << "\x1b[" << row << ";" << column << "H";
 	ss << "\x1b[" << color << "m";
