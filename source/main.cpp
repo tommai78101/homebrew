@@ -2,18 +2,22 @@
 
 int main() {
 	gfxInitDefault();
+	gfxSetDoubleBuffering(GFX_TOP, true);
+	
 	PrintConsole bottomScreen;
 	consoleSelect(consoleInit(GFX_BOTTOM, &bottomScreen));
 	
 	Output output;
-	Engine::Core core(&output);
-	int count = 0;
-	
 	output.print("Press A to send dummy messages.");
 	output.print("Press B to reverse output logs.");
 	output.print("Press START to quit.");
 	output.print(" ");
 	
+	
+	Engine::Core core(&output);
+	int count = 0;
+	
+	output.print("Entering render loop.");
 	while (aptMainLoop()){
 		hidScanInput();
 		u32 downEvent = hidKeysDown();
@@ -34,7 +38,11 @@ int main() {
 			output.print(s.str());
 			output.printAll();
 		}
-		gspWaitForVBlank();
+		
+		core.Update(downEvent);
+		core.Render();
+		
+		//gspWaitForVBlank();
 	}
 	
 	gfxExit();
