@@ -1,9 +1,13 @@
 #include "entity.h"
 
 namespace Engine {
-	Entity::Entity(Vertex list[]){
-		this->vertexList = linearAlloc(sizeof(list));
-		std::memcpy(this->vertexList, list, sizeof(list));
+	Entity::Entity(Core* core, std::vector<Vertex>* list) {
+		//Initializing class members.
+		this->core = core;
+		
+		//Initializing vertex list.
+		this->vertexList = linearAlloc(list->size());
+		std::memcpy(this->vertexList, list->data(), list->size());
 	}
 	
 	Entity::~Entity(){
