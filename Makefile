@@ -34,7 +34,8 @@ TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
 SOURCES		:=  source \
 				source/utility \
-				source/engine
+				source/engine \
+				source/entity
 DATA		:=	data
 INCLUDES	:=	include
 #ROMFS		:=	romfs
