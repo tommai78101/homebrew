@@ -9,10 +9,14 @@ namespace Engine {
 		this->distZ = 0.0;
 		this->uLoc_projection = 0;
 		this->uLoc_modelView = 0;
-		this->vbo_data = nullptr;
+		//this->vbo_data = nullptr;
 		this->leftTarget = nullptr;
 		this->rightTarget = nullptr;
 		this->vertexShader_dvlb = nullptr;
+		
+		//Loading entities.
+		Entity entity(vertexList, vertexListSize);
+		this->entityList.push_back(entity);
 		
 		//Initializing core engine.
 		this->Initialize();
@@ -77,13 +81,19 @@ namespace Engine {
 		AttrInfo_AddLoader(attributeInfo, 2, GPU_FLOAT, 3); //Third float array = normals.
 		
 		//Create vertex buffer objects.
-		this->vbo_data = linearAlloc(sizeof(vertexList));
-		std::memcpy(this->vbo_data, vertexList, sizeof(vertexList));
+		//this->vbo_data = linearAlloc(sizeof(vertexList));
+		//std::memcpy(this->vbo_data, vertexList, sizeof(vertexList));
 		
 		//Initialize and configure buffers.
 		C3D_BufInfo* bufferInfo = C3D_GetBufInfo();
 		BufInfo_Init(bufferInfo);
-		BufInfo_Add(bufferInfo, this->vbo_data, sizeof(Vertex), 3, 0x210);
+		//BufInfo_Add(bufferInfo, this->vbo_data, sizeof(Vertex), 3, 0x210);
+		
+		//Loading entities.
+		this->output->Print("Loading/Initializing entities.");
+		for (size_t i = 0; i < this->entityList.size(); i++){
+			this->entityList[i].Initialize(bufferInfo, 0x210);
+		}
 		
 		// Configure the first fragment shading substage to blend the fragment primary color
 		// with the fragment secondary color.
@@ -130,14 +140,17 @@ namespace Engine {
 		C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_modelView, &modelView);
 		
 		//Draw the vertex buffer objects.
-		C3D_DrawArrays(GPU_TRIANGLES, 0, vertexListSize);
+		u32 start = 0;
+		for (size_t i = 0; i < this->entityList.size(); i++){
+			start = this->entityList[i].Render(start);
+		}
 	}
 	
 	void Core::SceneExit(){
 		this->output->Print("Exiting scene.");
 		
 		//Free vertex buffer object.
-		linearFree(this->vbo_data);
+		//linearFree(this->vbo_data);
 		
 		//Free shader program
 		shaderProgramFree(&this->program);

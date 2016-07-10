@@ -8,6 +8,8 @@
 
 //Application header
 #include "../utility/output.h"
+#include "../entity/entity.h"
+
 
 //Engine namespace
 //Will contain all engine related features.
@@ -20,7 +22,9 @@ namespace Engine {
 		float angleX;
 		float angleY;
 		
-		void* vbo_data;
+		//void* vbo_data;
+		
+		std::vector<Entity> entityList;
 		
 		Output* output;
 		

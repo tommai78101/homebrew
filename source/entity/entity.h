@@ -6,19 +6,32 @@
 //Common header
 #include "../utility/common.h"
 
-//Application headers
-#include "../engine/core.h"
-
 namespace Engine {
 	class Entity {
-	private:
-		Core* core;
+	protected:
+		bool isEnabled;
 		void* vertexList;
+		u32 vertexListSize;
+		u32 listElementSize;
 		
 	public:
-		Entity(Core* core, std::vector<Vertex>* list);
+		Entity(const Vertex list[], int size);
 		~Entity();
+		
+		//Actions
 		void Initialize(C3D_BufInfo* bufferInfo, u64 permutation);
+		void Update();
+		u32 Render(u32 start);
+		
+		//Setter
+		void SetEnabled(bool value);
+		
+		//Getter
+		u32 GetListSize() const;
+		u32 GetTotalSize() const;
+		
+		//Conditionals
+		bool IsEnabled() const;
 	};
 };
 
