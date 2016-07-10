@@ -9,6 +9,8 @@
 //Application header
 #include "../utility/output.h"
 
+//Engine namespace
+//Will contain all engine related features.
 namespace Engine {
 	class Core {
 	private:
