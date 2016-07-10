@@ -132,7 +132,7 @@ ifneq ($(ROMFS),)
 	export _3DSXFLAGS += --romfs=$(CURDIR)/$(ROMFS)
 endif
 
-.PHONY: $(BUILD) clean all cia
+.PHONY: $(BUILD) clean all cia citra play
 
 #---------------------------------------------------------------------------------
 all: $(BUILD)
@@ -162,7 +162,11 @@ citra: all
 	@echo "... citra ..."
 	@/c/devkitPro/msys/home/Thompson/projects/citra/build/bin/Debug/citra.exe $(TARGET).3dsx &
 	@echo "Citra Complete!"
-
+	
+play:
+	@echo "... starting citra ..."
+	@/c/devkitPro/msys/home/Thompson/projects/citra/build/bin/Debug/citra.exe $(TARGET).3dsx &
+	@echo "Citra Complete!"
 
 #---------------------------------------------------------------------------------
 else
