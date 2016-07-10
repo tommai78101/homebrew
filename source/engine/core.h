@@ -20,7 +20,6 @@ namespace Engine {
 		float angleX;
 		float angleY;
 		
-		
 		void* vbo_data;
 		
 		Output* output;
@@ -45,6 +44,7 @@ namespace Engine {
 		~Core();
 		void Update(u32 keyDown);
 		void Render();
+		Output* GetOutput() const;
 	};
 };
 

@@ -9,6 +9,7 @@
 #include <sstream>
 #include <vector>
 #include <cmath>
+#include <array>
 
 //3DS standard header
 #include <3ds.h>
@@ -16,16 +17,6 @@
 
 //Shader headers
 #include "vshader_shbin.h"
-
-static inline std::string text(int row, int column, std::string message, int color = 37) {
-	std::stringstream ss;
-	ss << "\x1b[" << row << ";" << column << "H";
-	ss << "\x1b[" << color << "m";
-	ss << message;
-	ss << "\x1b[" << 37 << "m";
-	std::cout << ss.str() << std::endl;
-	return ss.str();
-}
 
 static const u32 COMMON_CLEAR_COLOR = 0x68B0D8FF;
 static const u32 COMMON_DISPLAY_TRANSFER_FLAGS = \

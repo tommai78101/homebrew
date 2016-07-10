@@ -8,16 +8,16 @@ int main() {
 	consoleSelect(consoleInit(GFX_BOTTOM, &bottomScreen));
 	
 	Output output;
-	output.print("Press A to send dummy messages.");
-	output.print("Press B to reverse output logs.");
-	output.print("Press START to quit.");
-	output.print(" ");
+	output.Print("Press A to send dummy messages.");
+	output.Print("Press B to reverse output logs.");
+	output.Print("Press START to quit.");
+	output.Print(" ");
 	
 	
 	Engine::Core core(&output);
 	int count = 0;
 	
-	output.print("Entering render loop.");
+	output.Print("Entering render loop.");
 	while (aptMainLoop()){
 		hidScanInput();
 		u32 downEvent = hidKeysDown();
@@ -29,14 +29,14 @@ int main() {
 			count++;
 			std::stringstream s;
 			s << "Hello world. Count: " << count;
-			output.print(s.str());
+			output.Print(s.str());
 		}
 		else if (downEvent & KEY_B){;
-			output.setReverseFlag(!output.getReverseFlag());
+			output.SetReverseFlag(!output.GetReverseFlag());
 			std::stringstream s;
-			s << "Reversing output direction to " << (output.getReverseFlag() == 1 ? "TRUE" : "FALSE") << ".";
-			output.print(s.str());
-			output.printAll();
+			s << "Reversing output direction to " << (output.GetReverseFlag() == 1 ? "TRUE" : "FALSE") << ".";
+			output.Print(s.str());
+			output.PrintAll();
 		}
 		
 		core.Update(downEvent);
@@ -48,3 +48,4 @@ int main() {
 	gfxExit();
 	return 0;
 }
+

@@ -19,7 +19,7 @@ namespace Engine {
 	}
 	
 	Core::~Core(){
-		this->output->print("Deinitializing core.");
+		this->output->Print("Deinitializing core.");
 		
 		//Exiting scene
 		this->SceneExit();
@@ -29,7 +29,7 @@ namespace Engine {
 	}
 	
 	void Core::Initialize(){
-		this->output->print("Initializing core.");
+		this->output->Print("Initializing core.");
 		
 		//Enable 3D
 		gfxSet3D(true);
@@ -54,7 +54,7 @@ namespace Engine {
 	}
 	
 	void Core::SceneInitialize(){
-		this->output->print("Initializing scene.");
+		this->output->Print("Initializing scene.");
 		
 		//Load vertex shader, then create a shader program to bind the vertex shader to.
 		//The variables are automatically generated from PICA shader files when using "make" commands.
@@ -134,7 +134,7 @@ namespace Engine {
 	}
 	
 	void Core::SceneExit(){
-		this->output->print("Exiting scene.");
+		this->output->Print("Exiting scene.");
 		
 		//Free vertex buffer object.
 		linearFree(this->vbo_data);
@@ -149,13 +149,13 @@ namespace Engine {
 			this->distZ--;
 			std::stringstream s;
 			s << "Z distance: " << this->distZ;
-			this->output->print(s.str());
+			this->output->Print(s.str());
 		}
 		else if (keyDown & KEY_R){
 			this->distZ++;
 			std::stringstream s;
 			s << "Z distance: " << this->distZ;
-			this->output->print(s.str());
+			this->output->Print(s.str());
 		}
 	}
 	
@@ -176,5 +176,9 @@ namespace Engine {
 			}
 		}
 		C3D_FrameEnd(0);
+	}
+	
+	Output* Core::GetOutput() const {
+		return this->output;
 	}
 };
