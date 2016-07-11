@@ -9,29 +9,40 @@
 namespace Engine {
 	class Entity {
 	protected:
-		bool isEnabled;
-		void* vertexList;
+		bool updateFlag;
+		bool renderFlag;
+		void* vertexBuffer;
 		u32 vertexListSize;
 		u32 listElementSize;
+		
+		float angleXSpeed;
+		float angleX;
+		float posX;
 		
 	public:
 		Entity(const Vertex list[], int size);
 		~Entity();
 		
 		//Actions
-		void Initialize(C3D_BufInfo* bufferInfo, u64 permutation);
 		void Update();
-		u32 Render(u32 start);
+		void RenderUpdate(C3D_Mtx* modelMatrix);
+		void Render();
+		void ConfigureBuffer();
 		
 		//Setter
-		void SetEnabled(bool value);
+		void SetRenderFlag(bool value);
+		void SetUpdateFlag(bool value);
+		void SetAngleXSpeed(float value);
+		void SetPositionX(float value);
 		
 		//Getter
+		void* GetVertexBuffer() const;
 		u32 GetListSize() const;
 		u32 GetTotalSize() const;
 		
 		//Conditionals
-		bool IsEnabled() const;
+		bool IsRenderEnabled() const;
+		bool IsUpdateEnabled() const;
 	};
 };
 

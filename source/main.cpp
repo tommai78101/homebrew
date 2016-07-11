@@ -41,8 +41,6 @@ int main() {
 		
 		core.Update(downEvent);
 		core.Render();
-		
-		//gspWaitForVBlank();
 	}
 	
 	gfxExit();

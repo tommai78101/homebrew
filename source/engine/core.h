@@ -17,12 +17,9 @@ namespace Engine {
 	class Core {
 	private:
 		int uLoc_projection;
-		int uLoc_modelView;
+		int uLoc_model;
+		int uLoc_view;
 		float distZ;
-		float angleX;
-		float angleY;
-		
-		//void* vbo_data;
 		
 		std::vector<Entity> entityList;
 		

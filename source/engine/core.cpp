@@ -2,21 +2,26 @@
 
 namespace Engine {
 	Core::Core(Output* out) {
-		//Setting up variables.
+		//Setting up/Initializing all variables.
 		this->output = out;
-		this->angleX = 0.0;
-		this->angleY = 0.0;
 		this->distZ = 0.0;
 		this->uLoc_projection = 0;
-		this->uLoc_modelView = 0;
-		//this->vbo_data = nullptr;
+		this->uLoc_view = 0;
+		this->uLoc_model = 0;
 		this->leftTarget = nullptr;
 		this->rightTarget = nullptr;
 		this->vertexShader_dvlb = nullptr;
 		
 		//Loading entities.
 		Entity entity(vertexList, vertexListSize);
+		entity.SetAngleXSpeed(1.0f);
+		entity.SetPositionX(3.0f);
 		this->entityList.push_back(entity);
+		
+		Entity entity2(vertexList, vertexListSize);
+		entity2.SetAngleXSpeed(-2.0f);
+		entity2.SetPositionX(-3.0f);
+		this->entityList.push_back(entity2);
 		
 		//Initializing core engine.
 		this->Initialize();
@@ -71,7 +76,8 @@ namespace Engine {
 		
 		//Get location of uniforms used in the vertex shader.
 		this->uLoc_projection = shaderInstanceGetUniformLocation(this->program.vertexShader, "projection");
-		this->uLoc_modelView = shaderInstanceGetUniformLocation(this->program.vertexShader, "modelView");
+		this->uLoc_model = shaderInstanceGetUniformLocation(this->program.vertexShader, "model");
+		this->uLoc_view = shaderInstanceGetUniformLocation(this->program.vertexShader, "view");
 		
 		//Initialize attributes, and then configure them for use with vertex shader.
 		C3D_AttrInfo* attributeInfo = C3D_GetAttrInfo();
@@ -79,21 +85,6 @@ namespace Engine {
 		AttrInfo_AddLoader(attributeInfo, 0, GPU_FLOAT, 3); //First float array = vertex position.
 		AttrInfo_AddLoader(attributeInfo, 1, GPU_FLOAT, 2); //Second float array = texture coordinates.
 		AttrInfo_AddLoader(attributeInfo, 2, GPU_FLOAT, 3); //Third float array = normals.
-		
-		//Create vertex buffer objects.
-		//this->vbo_data = linearAlloc(sizeof(vertexList));
-		//std::memcpy(this->vbo_data, vertexList, sizeof(vertexList));
-		
-		//Initialize and configure buffers.
-		C3D_BufInfo* bufferInfo = C3D_GetBufInfo();
-		BufInfo_Init(bufferInfo);
-		//BufInfo_Add(bufferInfo, this->vbo_data, sizeof(Vertex), 3, 0x210);
-		
-		//Loading entities.
-		this->output->Print("Loading/Initializing entities.");
-		for (size_t i = 0; i < this->entityList.size(); i++){
-			this->entityList[i].Initialize(bufferInfo, 0x210);
-		}
 		
 		// Configure the first fragment shading substage to blend the fragment primary color
 		// with the fragment secondary color.
@@ -119,38 +110,38 @@ namespace Engine {
 	}
 	
 	void Core::SceneRender(float interOcularDistance){
-		//Compute projection matrix.
+		//Compute projection matrix.                                                                                                               
 		Mtx_PerspStereoTilt(&this->projectionMatrix, 40.0f * (std::acos(-1) / 180.0f), 400.0f / 240.0f, 0.01f, 1000.0f, interOcularDistance, 2.0f);
-		Mtx_Translate(&this->projectionMatrix, 0.0, 0.0, -10.0 + this->distZ);
+		Mtx_Translate(&this->projectionMatrix, 0.0, 0.0, -10.0 + this->distZ);                                                                     
+		                                                                                                                                           
+		//Compute view matrix                                                                                                                      
+		C3D_Mtx viewMatrix;                                                                                                                        
+		Mtx_Identity(&viewMatrix);
 		
-		//Calculate model view matrix.
-		C3D_Mtx modelView;
-		Mtx_Identity(&modelView);
-		Mtx_Translate(&modelView, 0.0, 0.0, -2.0 + sinf(this->angleX));
-		Mtx_RotateX(&modelView, this->angleX, true);
-		Mtx_RotateY(&modelView, this->angleY, true);
+		//Update uniforms                                                                         
+		C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_projection, &this->projectionMatrix);      
+		C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_view, &viewMatrix);                        
 		
-		if (interOcularDistance >= 0.0f){
-			this->angleX += radian;
-			this->angleY += radian;
-		}
+		//Draw the vertex buffer objects.                     
+		for (size_t i = 0; i < this->entityList.size(); i++){ 
+			//Switch buffers
+			this->entityList[i].ConfigureBuffer();
 		
-		//Update uniforms
-		C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_projection, &this->projectionMatrix);
-		C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_modelView, &modelView);
-		
-		//Draw the vertex buffer objects.
-		u32 start = 0;
-		for (size_t i = 0; i < this->entityList.size(); i++){
-			start = this->entityList[i].Render(start);
+			//Calculate model view matrix.
+			C3D_Mtx model;
+			Mtx_Identity(&model);
+			this->entityList[i].RenderUpdate(&model);
+			
+			//Update uniforms
+			C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_model, &model);
+			
+			//Render entity.
+			this->entityList[i].Render();
 		}
 	}
 	
 	void Core::SceneExit(){
 		this->output->Print("Exiting scene.");
-		
-		//Free vertex buffer object.
-		//linearFree(this->vbo_data);
 		
 		//Free shader program
 		shaderProgramFree(&this->program);
@@ -158,6 +149,7 @@ namespace Engine {
 	}
 	
 	void Core::Update(u32 keyDown){
+		//This is for game logic, and not for updating game render updates.
 		if (keyDown & KEY_L){
 			this->distZ--;
 			std::stringstream s;
@@ -170,11 +162,16 @@ namespace Engine {
 			s << "Z distance: " << this->distZ;
 			this->output->Print(s.str());
 		}
+		
+		//Entity updates go here.
+		for (size_t i = 0; i < this->entityList.size(); i++){
+			this->entityList[i].Update();
+		}
 	}
 	
 	void Core::Render() {
+		//Fetch Stereoscopic 3D level.
 		float slider = osGet3DSliderState();
-		
 		//Inter Ocular Distance
 		float iod = slider / 3.0f;
 		
@@ -192,6 +189,7 @@ namespace Engine {
 	}
 	
 	Output* Core::GetOutput() const {
+		//This is only for fetching the Console.
 		return this->output;
 	}
 };
