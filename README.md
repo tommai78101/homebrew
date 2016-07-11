@@ -9,17 +9,17 @@ This project uses Eclipse C/C++ for homebrew application development, and Citra 
 
 ### Purpose
 
-Display working 3D cube model, with the flexible Console outputs still enabled. Core engine is now running perfectly fine.
+To display 2 fully rotating 3D cube models. To understand how to handle vertex buffers and iterating through a list of entities to update and render them.
 
 ### Results
 
 Citra 3DS Qt result:
 
-![](http://i.imgur.com/Ai8Uvxt.png)
+![](http://i.imgur.com/n8RtETY.png)
 
 ### Known Issue
 
-* Do not run with citra.exe (Non-Qt build).
+* Do not run with citra.exe (Non-Qt build), as it does not support hardware rendering nor is it configurable.
 
 ![](http://i.imgur.com/fIGscMk.png)
 
