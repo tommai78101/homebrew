@@ -6,8 +6,8 @@ namespace Engine {
 		this->output = out;
 		this->distZ = 0.0;
 		this->uLoc_projection = 0;
-		this->uLoc_view = 0;
 		this->uLoc_model = 0;
+		this->uLoc_view = 0;
 		this->leftTarget = nullptr;
 		this->rightTarget = nullptr;
 		this->vertexShader_dvlb = nullptr;
@@ -76,8 +76,8 @@ namespace Engine {
 		
 		//Get location of uniforms used in the vertex shader.
 		this->uLoc_projection = shaderInstanceGetUniformLocation(this->program.vertexShader, "projection");
-		this->uLoc_model = shaderInstanceGetUniformLocation(this->program.vertexShader, "model");
 		this->uLoc_view = shaderInstanceGetUniformLocation(this->program.vertexShader, "view");
+		this->uLoc_model = shaderInstanceGetUniformLocation(this->program.vertexShader, "model");
 		
 		//Initialize attributes, and then configure them for use with vertex shader.
 		C3D_AttrInfo* attributeInfo = C3D_GetAttrInfo();
@@ -102,7 +102,7 @@ namespace Engine {
 		LightLut_Phong(&this->lut_Phong, 30);
 		C3D_LightEnvLut(&this->lightEnvironment, GPU_LUT_D0, GPU_LUTINPUT_LN, false, &this->lut_Phong);
 		
-		C3D_FVec lightVector = {{ 16.0, 0.5, 0.0, 0.0 }};
+		C3D_FVec lightVector = {{ 6.0, 0.5, 0.0, 0.0 }};
 		
 		C3D_LightInit(&this->light, &this->lightEnvironment);
 		C3D_LightColor(&this->light, 1.0, 1.0, 1.0);
@@ -113,14 +113,13 @@ namespace Engine {
 		//Compute projection matrix.                                                                                                               
 		Mtx_PerspStereoTilt(&this->projectionMatrix, 40.0f * (std::acos(-1) / 180.0f), 400.0f / 240.0f, 0.01f, 1000.0f, interOcularDistance, 2.0f);
 		Mtx_Translate(&this->projectionMatrix, 0.0, 0.0, -10.0 + this->distZ);                                                                     
-		                                                                                                                                           
-		//Compute view matrix                                                                                                                      
-		C3D_Mtx viewMatrix;                                                                                                                        
+		                                                   
+		C3D_Mtx viewMatrix;
 		Mtx_Identity(&viewMatrix);
 		
 		//Update uniforms                                                                         
-		C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_projection, &this->projectionMatrix);      
-		C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_view, &viewMatrix);                        
+		C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_projection, &this->projectionMatrix);
+		C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_view, &viewMatrix);
 		
 		//Draw the vertex buffer objects.                     
 		for (size_t i = 0; i < this->entityList.size(); i++){ 
