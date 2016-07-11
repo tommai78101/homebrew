@@ -15,7 +15,7 @@ To fix lighting issues on the 2 rotating cubes. To understand Picasso language f
 
 Citra 3DS Qt result:
 
-![](http://i.imgur.com/UhcYGbu.png)
+![](http://i.imgur.com/YZqbMVw.png)
 
 ### Known Issue
 
