@@ -112,10 +112,10 @@ namespace Engine {
 	void Core::SceneRender(float interOcularDistance){
 		//Compute projection matrix.                                                                                                               
 		Mtx_PerspStereoTilt(&this->projectionMatrix, 40.0f * (std::acos(-1) / 180.0f), 400.0f / 240.0f, 0.01f, 1000.0f, interOcularDistance, 2.0f);
-		Mtx_Translate(&this->projectionMatrix, 0.0, 0.0, -10.0 + this->distZ);                                                                     
 		                                                   
 		C3D_Mtx viewMatrix;
 		Mtx_Identity(&viewMatrix);
+		Mtx_Translate(&viewMatrix, 0.0, 0.0, -10.0 + this->distZ);                                                                     
 		
 		//Update uniforms                                                                         
 		C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_projection, &this->projectionMatrix);
