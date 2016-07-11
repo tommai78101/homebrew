@@ -9,13 +9,13 @@ This project uses Eclipse C/C++ for homebrew application development, and Citra 
 
 ### Purpose
 
-To display 2 fully rotating 3D cube models. To understand how to handle vertex buffers and iterating through a list of entities to update and render them.
+To fix lighting issues on the 2 rotating cubes. To understand Picasso language for PICA200 graphics chip. For more information, please read [the (currently inaccurate) manual of Picasso Shader Lanuage for PICA200.](https://github.com/fincs/picasso/blob/master/Manual.md)
 
 ### Results
 
 Citra 3DS Qt result:
 
-![](http://i.imgur.com/n8RtETY.png)
+![](http://i.imgur.com/UhcYGbu.png)
 
 ### Known Issue
 
