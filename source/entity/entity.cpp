@@ -22,6 +22,7 @@ namespace Engine {
 		this->angleX = 0.0f;
 		this->angleXSpeed = 0.0f;
 		this->posX = 0.0f;
+		this->posY = 0.0f;
 	}
 	
 	Entity::~Entity(){
@@ -87,6 +88,10 @@ namespace Engine {
 	
 	void Entity::SetPositionX(float value) {
 		this->posX = value;
+	}
+	
+	void Entity::SetPositionY(float value) {
+		this->posY = value;
 	}
 	
 	bool Entity::IsRenderEnabled() const {

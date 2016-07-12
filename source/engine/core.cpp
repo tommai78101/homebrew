@@ -14,13 +14,15 @@ namespace Engine {
 		
 		//Loading entities.
 		Entity entity(vertexList, vertexListSize);
-		entity.SetAngleXSpeed(1.0f);
-		entity.SetPositionX(3.0f);
+		entity.SetAngleXSpeed(1.0f + ((std::rand() % 1000) / 1000.0f));
+		entity.SetPositionX(std::rand() % 30);
+		entity.SetPositionY(std::rand() % 40);
 		this->entityList.push_back(entity);
 		
 		Entity entity2(vertexList, vertexListSize);
-		entity2.SetAngleXSpeed(-2.0f);
-		entity2.SetPositionX(-3.0f);
+		entity2.SetAngleXSpeed(1.0f + ((std::rand() % 1000) / 1000.0f));
+		entity2.SetPositionX(std::rand() % 30);
+		entity2.SetPositionY(std::rand() % 40);
 		this->entityList.push_back(entity2);
 		
 		//Initializing core engine.
@@ -110,16 +112,18 @@ namespace Engine {
 	}
 	
 	void Core::SceneRender(float interOcularDistance){
-		//Compute projection matrix.                                                                                                               
+		//Compute projection matrix and update matrix to shader program.                                                                                                               
 		Mtx_PerspStereoTilt(&this->projectionMatrix, 40.0f * (std::acos(-1) / 180.0f), 400.0f / 240.0f, 0.01f, 1000.0f, interOcularDistance, 2.0f);
+		C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_projection, &this->projectionMatrix);
 		                                                   
+		//Compute view matrix and update matrix to shader program.
 		C3D_Mtx viewMatrix;
 		Mtx_Identity(&viewMatrix);
-		Mtx_Translate(&viewMatrix, 0.0, 0.0, -10.0 + this->distZ);                                                                     
-		
-		//Update uniforms                                                                         
-		C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_projection, &this->projectionMatrix);
+		Mtx_Translate(&viewMatrix, 0.0, 0.0, -10.0 + this->distZ);
 		C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_view, &viewMatrix);
+		
+		//Declaring reusable model matrix.
+		C3D_Mtx modelMatrix;
 		
 		//Draw the vertex buffer objects.                     
 		for (size_t i = 0; i < this->entityList.size(); i++){ 
@@ -127,12 +131,11 @@ namespace Engine {
 			this->entityList[i].ConfigureBuffer();
 		
 			//Calculate model view matrix.
-			C3D_Mtx model;
-			Mtx_Identity(&model);
-			this->entityList[i].RenderUpdate(&model);
+			Mtx_Identity(&modelMatrix);
+			this->entityList[i].RenderUpdate(&modelMatrix);
 			
-			//Update uniforms
-			C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_model, &model);
+			//Update to shader program.
+			C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_model, &modelMatrix);
 			
 			//Render entity.
 			this->entityList[i].Render();

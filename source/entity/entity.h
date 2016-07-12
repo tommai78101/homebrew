@@ -18,6 +18,7 @@ namespace Engine {
 		float angleXSpeed;
 		float angleX;
 		float posX;
+		float posY;
 		
 	public:
 		Entity(const Vertex list[], int size);
@@ -34,6 +35,7 @@ namespace Engine {
 		void SetUpdateFlag(bool value);
 		void SetAngleXSpeed(float value);
 		void SetPositionX(float value);
+		void SetPositionY(float value);
 		
 		//Getter
 		void* GetVertexBuffer() const;
