@@ -13,37 +13,25 @@ int main() {
 	output.Print("Press START to quit.");
 	output.Print(" ");
 	
-	
 	Engine::Core core(&output);
-	int count = 0;
 	
 	output.Print("Entering render loop.");
 	while (aptMainLoop()){
 		hidScanInput();
 		u32 downEvent = hidKeysDown();
 		u32 heldEvent = hidKeysHeld();
+		u32 upEvent = hidKeysHeld();
+		
 		if ((downEvent & KEY_START) || (heldEvent & KEY_START)){
 			break;
 		}
-		else if ((downEvent & KEY_A) || (heldEvent & KEY_A)){
-			count++;
-			std::stringstream s;
-			s << "Hello world. Count: " << count;
-			output.Print(s.str());
-		}
-		else if (downEvent & KEY_B){;
-			output.SetReverseFlag(!output.GetReverseFlag());
-			std::stringstream s;
-			s << "Reversing output direction to " << (output.GetReverseFlag() == 1 ? "TRUE" : "FALSE") << ".";
-			output.Print(s.str());
-			output.PrintAll();
-		}
 		
-		core.Update(downEvent);
+		core.Update(downEvent, heldEvent, upEvent);
 		core.Render();
 	}
 	
 	gfxExit();
 	return 0;
 }
+
 

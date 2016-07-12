@@ -43,7 +43,7 @@ namespace Engine {
 	public:
 		Core(Output* output);
 		~Core();
-		void Update(u32 keyDown);
+		void Update(u32 keyDown, u32 keyHeld, u32 keyUp);
 		void Render();
 		Output* GetOutput() const;
 	};

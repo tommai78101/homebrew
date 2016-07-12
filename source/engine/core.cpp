@@ -14,13 +14,13 @@ namespace Engine {
 		
 		//Loading entities.
 		Entity entity(vertexList, vertexListSize);
-		entity.SetAngleXSpeed(1.0f + ((std::rand() % 1000) / 1000.0f));
+		entity.SetAngleXSpeed(1.0f);
 		entity.SetPositionX(std::rand() % 30);
 		entity.SetPositionY(std::rand() % 40);
 		this->entityList.push_back(entity);
 		
 		Entity entity2(vertexList, vertexListSize);
-		entity2.SetAngleXSpeed(1.0f + ((std::rand() % 1000) / 1000.0f));
+		entity2.SetAngleXSpeed(1.0f);
 		entity2.SetPositionX(std::rand() % 30);
 		entity2.SetPositionY(std::rand() % 40);
 		this->entityList.push_back(entity2);
@@ -150,19 +150,17 @@ namespace Engine {
 		DVLB_Free(this->vertexShader_dvlb);
 	}
 	
-	void Core::Update(u32 keyDown){
+	void Core::Update(u32 keyDown, u32 keyHeld, u32 keyUp){
 		//This is for game logic, and not for updating game render updates.
 		if (keyDown & KEY_L){
 			this->distZ--;
-			std::stringstream s;
-			s << "Z distance: " << this->distZ;
-			this->output->Print(s.str());
 		}
 		else if (keyDown & KEY_R){
 			this->distZ++;
-			std::stringstream s;
-			s << "Z distance: " << this->distZ;
-			this->output->Print(s.str());
+		}
+		else if (keyDown & KEY_B){;
+			this->output->SetReverseFlag(!this->output->GetReverseFlag());
+			this->output->PrintAll();
 		}
 		
 		//Entity updates go here.
