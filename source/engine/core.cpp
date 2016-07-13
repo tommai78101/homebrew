@@ -9,8 +9,7 @@ namespace Engine {
 		this->camX = 0.0f;
 		this->camZ = 0.0f;
 		this->rotationY = 0.0f;
-		this->playerSpeed = 0.2f;
-		this->runningFlag = false;
+		this->playerSpeed = 0.05f;
 		
 		//Uniform location pointers for the shaders.
 		this->uLoc_projection = 0;
@@ -186,15 +185,12 @@ namespace Engine {
 			}
 		}
 		
-		//Running Toggle
-		if ((keyDown & KEY_A)){
-			this->runningFlag = !this->runningFlag;
-			if (this->runningFlag){
-				this->playerSpeed = 0.5f;	
-			}
-			else {
-				this->playerSpeed = 0.2f;
-			}
+		//Running Button.
+		if ((keyDown & KEY_A) || (keyHeld & KEY_A)){
+			this->playerSpeed = 0.5f;
+		}
+		else if (keyUp & KEY_A){
+			this->playerSpeed = 0.05f;
 		}
 		
 		//FPS Camera Movement.
@@ -202,7 +198,7 @@ namespace Engine {
 		//Cartesian coordinates, X, and Z axes.
 		//Note strafing reverses the ordering of cosine and sine calculations, because
 		//The cosine and sine calculations are rotated by 90 degrees counterclockwise.
-		else if (keyHeld & KEY_L){
+		if (keyHeld & KEY_L){
 			this->camX -= cosf(this->rotationY) * this->playerSpeed;
 			this->camZ -= sinf(this->rotationY) * this->playerSpeed;
 		}

@@ -20,7 +20,7 @@ int main() {
 		hidScanInput();
 		u32 downEvent = hidKeysDown();
 		u32 heldEvent = hidKeysHeld();
-		u32 upEvent = hidKeysHeld();
+		u32 upEvent = hidKeysUp();
 		
 		if ((downEvent & KEY_START) || (heldEvent & KEY_START)){
 			break;

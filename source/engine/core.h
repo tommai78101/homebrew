@@ -16,7 +16,6 @@
 namespace Engine {
 	class Core {
 	private:
-		bool runningFlag;
 		int uLoc_projection;
 		int uLoc_model;
 		int uLoc_view;
