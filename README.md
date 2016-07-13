@@ -9,7 +9,7 @@ This project uses Eclipse C/C++ for homebrew application development, and Citra 
 
 ### Notes
 
-* Manual of Picasso Shader Lanuage for PICA200.](https://github.com/fincs/picasso/blob/master/Manual.md)
+* [Manual of Picasso Shader Lanuage for PICA200.](https://github.com/fincs/picasso/blob/master/Manual.md)
 
 ### Purpose
 
