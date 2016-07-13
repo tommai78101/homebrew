@@ -135,14 +135,18 @@ endif
 .PHONY: $(BUILD) clean all cia citra play
 
 #---------------------------------------------------------------------------------
-all: $(BUILD)
+#Default make target.
 
-$(BUILD): clean
+$(BUILD):
 	@echo "... build ..."
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
-
+	
 #---------------------------------------------------------------------------------
+#Extra make target.
+
+all: clean $(BUILD)
+
 clean:
 	@echo "... clean ..."
 	@rm -fr $(BUILD) $(TARGET).3dsx $(OUTPUT).smdh $(TARGET).elf $(TARGET).cia
