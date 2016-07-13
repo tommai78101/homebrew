@@ -5,11 +5,12 @@ namespace Engine {
 		//Setting up/Initializing all variables.
 		this->output = out;
 		
-		//Player coordinates.
+		//Player coordinates and properties.
 		this->camX = 0.0f;
 		this->camZ = 0.0f;
 		this->rotationY = 0.0f;
 		this->playerSpeed = 0.2f;
+		this->runningFlag = false;
 		
 		//Uniform location pointers for the shaders.
 		this->uLoc_projection = 0;
@@ -163,8 +164,9 @@ namespace Engine {
 		DVLB_Free(this->vertexShader_dvlb);
 	}
 	
+	//This is for game logic, and not for updating game render updates.
 	void Core::Update(u32 keyDown, u32 keyHeld, u32 keyUp){
-		//This is for game logic, and not for updating game render updates.
+		//Output Controls.
 		if (keyDown & KEY_B){;
 			this->output->SetReverseFlag(!this->output->GetReverseFlag());
 			this->output->PrintAll();
@@ -184,6 +186,18 @@ namespace Engine {
 			}
 		}
 		
+		//Running Toggle
+		if ((keyDown & KEY_A)){
+			this->runningFlag = !this->runningFlag;
+			if (this->runningFlag){
+				this->playerSpeed = 0.5f;	
+			}
+			else {
+				this->playerSpeed = 0.2f;
+			}
+		}
+		
+		//FPS Camera Movement.
 		//Forward uses the cosine and sine calculations for traversing on the 
 		//Cartesian coordinates, X, and Z axes.
 		//Note strafing reverses the ordering of cosine and sine calculations, because
