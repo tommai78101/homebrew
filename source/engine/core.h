@@ -9,6 +9,7 @@
 //Application header
 #include "../utility/output.h"
 #include "../entity/entity.h"
+#include "../entity/floor.h"
 
 
 //Engine namespace

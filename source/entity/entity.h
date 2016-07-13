@@ -25,11 +25,11 @@ namespace Engine {
 		//RAII requirements.
 		Entity(const Vertex list[], int size);
 		Entity(const Entity& copy);
-		~Entity();
+		virtual ~Entity();
 		
 		//Actions
-		void Update();
-		void RenderUpdate(C3D_Mtx* modelMatrix);
+		virtual void Update();
+		virtual void RenderUpdate(C3D_Mtx* modelMatrix);
 		void Render();
 		void ConfigureBuffer();
 		

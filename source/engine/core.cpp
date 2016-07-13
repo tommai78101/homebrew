@@ -32,6 +32,9 @@ namespace Engine {
 			t.SetPositionY(0.0f);
 			this->entityList.push_back(t);
 		}
+		Floor f(vertexList, vertexListSize);
+		f.SetPositionY(0.0f);
+		this->entityList.push_back(f);
 		
 		//Initializing view matrix.
 		Mtx_Identity(&this->viewMatrix);
