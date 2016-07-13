@@ -160,7 +160,7 @@ sideload: cia
 	
 citra: all
 	@echo "... citra ..."
-	@/c/devkitPro/msys/home/Thompson/projects/citra/build/bin/Debug/citra.exe $(TARGET).3dsx &
+	@/c/devkitPro/msys/home/Thompson/projects/citra/build/bin/Debug/citra-qt.exe $(TARGET).3dsx &
 	@echo "Citra Complete!"
 	
 play:
