@@ -20,9 +20,25 @@ namespace Engine {
 		
 		//Other remaining stuffs.
 		this->angleX = 0.0f;
+		this->angleXOffset = 0.0f;
 		this->angleXSpeed = 0.0f;
 		this->posX = 0.0f;
 		this->posY = 0.0f;
+	}
+	
+	Entity::Entity(const Entity& copy){
+		//Copying everything over.
+		this->listElementSize = copy.listElementSize;
+		this->vertexListSize = copy.vertexListSize;
+		this->renderFlag = copy.renderFlag;
+		this->updateFlag = copy.updateFlag;
+		this->angleX = copy.angleX;
+		this->angleXOffset = copy.angleXOffset;
+		this->angleXSpeed = copy.angleXSpeed;
+		this->posX = copy.posX;
+		this->posY = copy.posY;
+		this->vertexBuffer = linearAlloc(copy.vertexListSize);
+		std::memcpy(this->vertexBuffer, copy.vertexBuffer, copy.vertexListSize);
 	}
 	
 	Entity::~Entity(){
@@ -34,15 +50,18 @@ namespace Engine {
 		if (this->updateFlag){
 			//Do stuff here....
 			this->angleX += this->angleXSpeed * radian;
+			this->angleX += this->angleXOffset * radian;
+			if (this->angleX > degToRad(180.0f)){
+				this->angleX = degToRad(-180.0f);
+			}
+			this->posX = 3.0f * cosf(this->angleX);
+			this->posY = 3.0f * sinf(this->angleX);
 		}
 	}
 	
 	void Entity::RenderUpdate(C3D_Mtx* modelMatrix) {
 		//This update function will update entity properties.
-		Mtx_Translate(modelMatrix, this->posX, 0.0f, 0.0f);
-		Mtx_Translate(modelMatrix, 0.0, 0.0, -2.0 + sinf(this->angleX));
-		Mtx_RotateX(modelMatrix, this->angleX, true);
-		Mtx_RotateY(modelMatrix, this->angleX, true);
+		Mtx_Translate(modelMatrix, this->posX, this->posY, 0.0f);
 	}
 	
 	void Entity::Render(){
@@ -84,6 +103,10 @@ namespace Engine {
 	
 	void Entity::SetAngleXSpeed(float value) {
 		this->angleXSpeed = value;
+	}
+	
+	void Entity::SetAngleXOffset(float value){
+		this->angleXOffset = value;
 	}
 	
 	void Entity::SetPositionX(float value) {

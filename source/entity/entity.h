@@ -17,11 +17,13 @@ namespace Engine {
 		
 		float angleXSpeed;
 		float angleX;
+		float angleXOffset;
 		float posX;
 		float posY;
 		
 	public:
 		Entity(const Vertex list[], int size);
+		Entity(const Entity& copy);
 		~Entity();
 		
 		//Actions
@@ -34,6 +36,7 @@ namespace Engine {
 		void SetRenderFlag(bool value);
 		void SetUpdateFlag(bool value);
 		void SetAngleXSpeed(float value);
+		void SetAngleXOffset(float value);
 		void SetPositionX(float value);
 		void SetPositionY(float value);
 		

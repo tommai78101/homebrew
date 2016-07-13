@@ -12,18 +12,16 @@ namespace Engine {
 		this->rightTarget = nullptr;
 		this->vertexShader_dvlb = nullptr;
 		
-		//Loading entities.
-		Entity entity(vertexList, vertexListSize);
-		entity.SetAngleXSpeed(1.0f);
-		entity.SetPositionX(std::rand() % 30);
-		entity.SetPositionY(std::rand() % 40);
-		this->entityList.push_back(entity);
+		float radius = 3.0f;
 		
-		Entity entity2(vertexList, vertexListSize);
-		entity2.SetAngleXSpeed(1.0f);
-		entity2.SetPositionX(std::rand() % 30);
-		entity2.SetPositionY(std::rand() % 40);
-		this->entityList.push_back(entity2);
+		//Loading entities.
+		for (int i = 0; i < 2; i++){
+			Entity t(vertexList, vertexListSize);
+			t.SetAngleXSpeed(1.0f * i + 1.0f);
+			t.SetPositionX(-radius);
+			t.SetPositionY(0.0f);
+			this->entityList.push_back(t);
+		}
 		
 		//Initializing core engine.
 		this->Initialize();

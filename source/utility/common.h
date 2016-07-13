@@ -106,4 +106,8 @@ static const C3D_Material material =
 static const int vertexListSize = (sizeof(vertexList) / sizeof(vertexList[0]));
 static const float radian = std::acos(-1) / 180.0f;
 
+static inline float degToRad(float degrees){
+	return degrees * radian;
+}
+
 #endif
