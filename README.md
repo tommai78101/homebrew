@@ -7,9 +7,15 @@ Testing homebrew stuffs.
 
 This project uses Eclipse C/C++ for homebrew application development, and Citra 3DS emulator for homebrew debugging/testing.
 
+### Notes
+
+* Manual of Picasso Shader Lanuage for PICA200.](https://github.com/fincs/picasso/blob/master/Manual.md)
+
 ### Purpose
 
-To fix lighting issues on the 2 rotating cubes. To understand Picasso language for PICA200 graphics chip. For more information, please read [the (currently inaccurate) manual of Picasso Shader Lanuage for PICA200.](https://github.com/fincs/picasso/blob/master/Manual.md)
+FPS Camera implemented using Euler Angles and simple matrix transformations. Note, Gimbal Lock is avoided due to not caring about Pitch on the X axis.
+
+Also aims to fix dynamic memory leak issues.
 
 ### Results
 

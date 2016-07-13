@@ -19,13 +19,17 @@ namespace Engine {
 		int uLoc_projection;
 		int uLoc_model;
 		int uLoc_view;
-		float distZ;
+		float camX;
+		float camZ;
+		float rotationY;
+		float playerSpeed;
 		
 		std::vector<Entity> entityList;
 		
 		Output* output;
 		
 		C3D_Mtx projectionMatrix;
+		C3D_Mtx viewMatrix;
 		C3D_LightEnv lightEnvironment;
 		C3D_Light light;
 		C3D_LightLut lut_Phong;
@@ -35,6 +39,7 @@ namespace Engine {
 		DVLB_s* vertexShader_dvlb;
 		shaderProgram_s program;
 		
+		//Action functions.
 		void Initialize();
 		void SceneInitialize();
 		void SceneRender(float interOcularDistance);
@@ -43,8 +48,12 @@ namespace Engine {
 	public:
 		Core(Output* output);
 		~Core();
+		
+		//Important Action functions
 		void Update(u32 keyDown, u32 keyHeld, u32 keyUp);
 		void Render();
+		
+		//Getter/Setters
 		Output* GetOutput() const;
 	};
 };

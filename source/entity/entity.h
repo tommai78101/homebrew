@@ -22,6 +22,7 @@ namespace Engine {
 		float posY;
 		
 	public:
+		//RAII requirements.
 		Entity(const Vertex list[], int size);
 		Entity(const Entity& copy);
 		~Entity();

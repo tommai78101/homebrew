@@ -4,17 +4,27 @@ namespace Engine {
 	Core::Core(Output* out) {
 		//Setting up/Initializing all variables.
 		this->output = out;
-		this->distZ = 0.0;
+		
+		//Player coordinates.
+		this->camX = 0.0f;
+		this->camZ = 0.0f;
+		this->rotationY = 0.0f;
+		this->playerSpeed = 0.2f;
+		
+		//Uniform location pointers for the shaders.
 		this->uLoc_projection = 0;
 		this->uLoc_model = 0;
 		this->uLoc_view = 0;
+		
+		//Screen targets.
 		this->leftTarget = nullptr;
 		this->rightTarget = nullptr;
+		
+		//No idea what this is.
 		this->vertexShader_dvlb = nullptr;
 		
-		float radius = 3.0f;
-		
 		//Loading entities.
+		float radius = 3.0f;
 		for (int i = 0; i < 2; i++){
 			Entity t(vertexList, vertexListSize);
 			t.SetAngleXSpeed(1.0f * i + 1.0f);
@@ -22,6 +32,9 @@ namespace Engine {
 			t.SetPositionY(0.0f);
 			this->entityList.push_back(t);
 		}
+		
+		//Initializing view matrix.
+		Mtx_Identity(&this->viewMatrix);
 		
 		//Initializing core engine.
 		this->Initialize();
@@ -110,18 +123,20 @@ namespace Engine {
 	}
 	
 	void Core::SceneRender(float interOcularDistance){
+		//Declaring reusable model matrix.
+		C3D_Mtx modelMatrix;
+		
 		//Compute projection matrix and update matrix to shader program.                                                                                                               
 		Mtx_PerspStereoTilt(&this->projectionMatrix, 40.0f * (std::acos(-1) / 180.0f), 400.0f / 240.0f, 0.01f, 1000.0f, interOcularDistance, 2.0f);
 		C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_projection, &this->projectionMatrix);
 		                                                   
-		//Compute view matrix and update matrix to shader program.
-		C3D_Mtx viewMatrix;
-		Mtx_Identity(&viewMatrix);
-		Mtx_Translate(&viewMatrix, 0.0, 0.0, -10.0 + this->distZ);
-		C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_view, &viewMatrix);
+		//Do something about view matrix.
+		Mtx_Identity(&this->viewMatrix);
+		Mtx_RotateY(&this->viewMatrix, this->rotationY, true);
+		Mtx_Translate(&this->viewMatrix, -this->camX, 0.0f, -this->camZ);
 		
-		//Declaring reusable model matrix.
-		C3D_Mtx modelMatrix;
+		//Compute view matrix and update matrix to shader program.
+		C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_view, &this->viewMatrix);
 		
 		//Draw the vertex buffer objects.                     
 		for (size_t i = 0; i < this->entityList.size(); i++){ 
@@ -150,15 +165,44 @@ namespace Engine {
 	
 	void Core::Update(u32 keyDown, u32 keyHeld, u32 keyUp){
 		//This is for game logic, and not for updating game render updates.
-		if (keyDown & KEY_L){
-			this->distZ--;
-		}
-		else if (keyDown & KEY_R){
-			this->distZ++;
-		}
-		else if (keyDown & KEY_B){;
+		if (keyDown & KEY_B){;
 			this->output->SetReverseFlag(!this->output->GetReverseFlag());
 			this->output->PrintAll();
+		}
+		
+		//Game Controls
+		if (keyHeld & KEY_LEFT){
+			this->rotationY -= radian;
+			if (this->rotationY < degToRad(-180.0f)){
+				this->rotationY = degToRad(180.0f);
+			}
+		}
+		else if (keyHeld & KEY_RIGHT){
+			this->rotationY += radian;
+			if (this->rotationY > degToRad(180.0f)){
+				this->rotationY = degToRad(-180.0f);
+			}
+		}
+		
+		//Forward uses the cosine and sine calculations for traversing on the 
+		//Cartesian coordinates, X, and Z axes.
+		//Note strafing reverses the ordering of cosine and sine calculations, because
+		//The cosine and sine calculations are rotated by 90 degrees counterclockwise.
+		else if (keyHeld & KEY_L){
+			this->camX -= cosf(this->rotationY) * this->playerSpeed;
+			this->camZ -= sinf(this->rotationY) * this->playerSpeed;
+		}
+		else if (keyHeld & KEY_R){
+			this->camX += cosf(this->rotationY) * this->playerSpeed;
+			this->camZ += sinf(this->rotationY) * this->playerSpeed;
+		}
+		else if (keyHeld & KEY_UP){
+			this->camX += sinf(this->rotationY) * this->playerSpeed;
+			this->camZ -= cosf(this->rotationY) * this->playerSpeed;
+		}
+		else if (keyHeld & KEY_DOWN){
+			this->camX -= sinf(this->rotationY) * this->playerSpeed;
+			this->camZ += cosf(this->rotationY) * this->playerSpeed;
 		}
 		
 		//Entity updates go here.
