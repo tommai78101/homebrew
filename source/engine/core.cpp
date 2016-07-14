@@ -49,6 +49,7 @@ namespace Engine {
 		C3D_Fini();
 	}
 	
+	//Singleton for getting the engine instance.
 	Core& Core::GetInstance() {
 		static Output output;
 		static Core core(&output);
@@ -190,7 +191,7 @@ namespace Engine {
 	//This is for game logic, and not for updating game render updates.
 	void Core::Update(u32 keyDown, u32 keyHeld, u32 keyUp){
 		//Output Controls.
-		if (keyDown & KEY_B){;
+		if (keyDown & KEY_B){
 			this->output->SetReverseFlag(!this->output->GetReverseFlag());
 			this->output->PrintAll();
 		}
