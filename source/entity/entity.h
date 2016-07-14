@@ -16,12 +16,21 @@ namespace Engine {
 		u32 listElementSize;
 		
 		float angleXSpeed;
-		float angleX;
 		float angleXOffset;
-		float posX;
-		float posY;
 		
 	public:
+		//Public variables (to avoid writing a lot of setters/getters)
+		float posX;
+		float posY;
+		float posZ;
+		float rotX;
+		float rotY;
+		float rotZ;
+		float scaleX;
+		float scaleY;
+		float scaleZ;
+		
+		
 		//RAII requirements.
 		Entity(const Vertex list[], int size);
 		Entity(const Entity& copy);
@@ -40,8 +49,16 @@ namespace Engine {
 		void SetUpdateFlag(bool value);
 		void SetAngleXSpeed(float value);
 		void SetAngleXOffset(float value);
-		void SetPositionX(float value);
-		void SetPositionY(float value);
+		
+//		void SetPositionX(float value);
+//		void SetPositionY(float value);
+//		void SetPositionZ(float value);
+//		void SetRotationX(float value);
+//		void SetRotationY(float value);
+//		void SetRotationZ(float value);
+//		void SetScaleX(float value);
+//		void SetScaleY(float value);
+//		void SetScaleZ(float value);
 		
 		//Getter
 		void* GetVertexBuffer() const;

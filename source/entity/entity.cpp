@@ -19,24 +19,36 @@ namespace Engine {
 		this->updateFlag = true;
 		
 		//Other remaining stuffs.
-		this->angleX = 0.0f;
 		this->angleXOffset = 0.0f;
 		this->angleXSpeed = 0.0f;
 		this->posX = 0.0f;
 		this->posY = 0.0f;
+		this->posZ = 0.0f;
+		this->rotX = 0.0f;
+		this->rotY = 0.0f;
+		this->rotZ = 0.0f;
+		this->scaleX = 0.0f;
+		this->scaleY = 0.0f;
+		this->scaleZ = 0.0f;
 	}
 	
 	Entity::Entity(const Entity& copy){
 		//Copying everything over.
+		this->posX = copy.posX;
+		this->posY = copy.posY;
+		this->posZ = copy.posZ;
+		this->rotX = copy.rotX;
+		this->rotY = copy.rotY;
+		this->rotZ = copy.rotZ;
+		this->scaleX = copy.scaleX;
+		this->scaleY = copy.scaleY;
+		this->scaleZ = copy.scaleZ;
 		this->listElementSize = copy.listElementSize;
 		this->vertexListSize = copy.vertexListSize;
 		this->renderFlag = copy.renderFlag;
 		this->updateFlag = copy.updateFlag;
-		this->angleX = copy.angleX;
 		this->angleXOffset = copy.angleXOffset;
 		this->angleXSpeed = copy.angleXSpeed;
-		this->posX = copy.posX;
-		this->posY = copy.posY;
 		this->vertexBuffer = linearAlloc(copy.vertexListSize);
 		std::memcpy(this->vertexBuffer, copy.vertexBuffer, copy.vertexListSize);
 	}
@@ -49,13 +61,13 @@ namespace Engine {
 		//This is for game logic updates, for each individual entities in the engine.
 		if (this->updateFlag){
 			//Do stuff here....
-			this->angleX += this->angleXSpeed * radian;
-			this->angleX += this->angleXOffset * radian;
-			if (this->angleX > degToRad(180.0f)){
-				this->angleX = degToRad(-180.0f);
+			this->rotX += this->angleXSpeed * radian;
+			this->rotX += this->angleXOffset * radian;
+			if (this->rotX > degToRad(180.0f)){
+				this->rotX = degToRad(-180.0f);
 			}
-			this->posX = 3.0f * cosf(this->angleX);
-			this->posY = 3.0f * sinf(this->angleX);
+			this->posX = 3.0f * cosf(this->rotX);
+			this->posY = 3.0f * sinf(this->rotX);
 		}
 	}
 	
@@ -109,13 +121,41 @@ namespace Engine {
 		this->angleXOffset = value;
 	}
 	
-	void Entity::SetPositionX(float value) {
-		this->posX = value;
-	}
-	
-	void Entity::SetPositionY(float value) {
-		this->posY = value;
-	}
+//	void Entity::SetPositionX(float value) {
+//		this->posX = value;
+//	}
+//	
+//	void Entity::SetPositionY(float value) {
+//		this->posY = value;
+//	}
+//	
+//	void Entity::SetPositionZ(float value){
+//		this->posZ = value;
+//	}
+//	
+//	void Entity::SetRotationX(float value){
+//		this->rotX = value;
+//	}
+//	
+//	void Entity::SetRotationY(float value){
+//		this->rotY = value;
+//	}
+//	
+//	void Entity::SetRotationZ(float value){
+//		this->rotZ = value;
+//	}
+//	
+//	void Entity::SetScaleX(float value){
+//		this->scaleX = value;
+//	}
+//	
+//	void Entity::SetScaleY(float value){
+//		this->scaleY = value;
+//	}
+//	
+//	void Entity::SetScaleZ(float value){
+//		this->scaleZ = value;
+//	}
 	
 	bool Entity::IsRenderEnabled() const {
 		return this->renderFlag;

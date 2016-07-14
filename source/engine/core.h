@@ -59,13 +59,12 @@ namespace Engine {
 		//Singleton.
 		static Core& GetInstance();
 		
-		//Discarding methods we don't want. (C++11)
-		//Core(Core const&) = delete;
-		//void operator=(Core const&) = delete;
-		
 		//Important Action functions.
 		void Update(u32 keyDown, u32 keyHeld, u32 keyUp);
 		void Render();
+		
+		//Helper methods
+		void AddEntity(Entity entity, float positionX, float positionY, float positionY, float rotationX = 0.0f, float rotationY = 0.0f, float rotationZ = 0.0f, float scaleX = 1.0f, float scaleY = 1.0f, float scaleZ = 1.0f);
 		
 		//Getter/Setters.
 		Output* GetOutput() const;

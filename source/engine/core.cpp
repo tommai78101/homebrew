@@ -269,4 +269,18 @@ namespace Engine {
 		//This is only for fetching the Console.
 		return this->output;
 	}
+	
+	//Helper methods
+	//Method parameter length will surely be off the screen.
+	void Core::AddEntity(Entity entity, 
+			float positionX, float positionY, float positionY, 
+			float rotationX = 0.0f, float rotationY = 0.0f, float rotationZ = 0.0f, 
+			float scaleX = 1.0f, float scaleY = 1.0f, float scaleZ = 1.0f)
+	{
+		Entity* t = (Entity*) linearAlloc(sizeof(entity));
+		std::memcpy(t, &entity, sizeof(entity));
+		t->SetPositionX(positionX);
+		t->SetPositionY(positionY);
+		this->entityList.push_back(t);
+	}
 };
