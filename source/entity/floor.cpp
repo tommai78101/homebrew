@@ -15,6 +15,7 @@ namespace Engine {
 	}
 	
 	void Floor::RenderUpdate(C3D_Mtx* modelMatrix) {
-		Mtx_Scale(modelMatrix, 10.0f, 1.0f, 1.0f);
+		Mtx_Translate(modelMatrix, 0.0f, -5.0f, 0.0f);
+		Mtx_Scale(modelMatrix, 100.0f, 0.001f, 100.0f);
 	}
 };
