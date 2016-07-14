@@ -28,20 +28,14 @@ namespace Engine {
 		for (int i = 0; i < 3; i++){
 			if (i == 0){
 				Floor e(vertexList, vertexListSize);
-				Entity* t = (Entity*) linearAlloc(sizeof(e));
-				std::memcpy(t, &e, sizeof(e));
-				t->SetPositionX(0.0f);
-				t->SetPositionY(-5.0f);
-				this->entityList.push_back(t);
+				e.posY = -5.0f;
+				AddEntity(&e);
 			}
 			else {
 				Entity e(vertexList, vertexListSize);
-				Entity* t = (Entity*) linearAlloc(sizeof(e));
-				std::memcpy(t, &e, sizeof(e));
-				t->SetAngleXSpeed(1.0f + (i * 2.0f));
-				t->SetPositionX(-radius * (i + 1));
-				t->SetPositionY(0.0f);
-				this->entityList.push_back(t);
+				e.SetAngleXSpeed(i + 1.0f);
+				e.posX = radius * (i+1);
+				AddEntity(&e);
 			}
 		}
 		
@@ -271,23 +265,9 @@ namespace Engine {
 	}
 	
 	//Helper methods
-	//Method parameter length will surely be off the screen.
-	void Core::AddEntity(Entity entity, 
-			float positionX, float positionY, float positionZ, 
-			float rotationX = 0.0f, float rotationY = 0.0f, float rotationZ = 0.0f, 
-			float scaleX = 1.0f, float scaleY = 1.0f, float scaleZ = 1.0f)
-	{
-		Entity* t = (Entity*) linearAlloc(sizeof(entity));
-		std::memcpy(t, &entity, sizeof(entity));
-		t->posX = positionX;
-		t->posY = positionY;
-		t->posZ = positionZ;
-		t->rotX = rotationX;
-		t->rotY = rotationY;
-		t->rotZ = rotationZ;
-		t->scaleX = scaleX;
-		t->scaleY = scaleX;
-		t->scaleZ = scaleX;
+	void Core::AddEntity(Entity* entity) {
+		Entity* t = (Entity*) linearAlloc(sizeof(*entity));
+		std::memcpy(t, entity, sizeof(*entity));
 		this->entityList.push_back(t);
 	}
 };
