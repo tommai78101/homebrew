@@ -1,4 +1,5 @@
 /build
+/.settings
 
 *.cia
 *.elf
