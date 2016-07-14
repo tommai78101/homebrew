@@ -13,15 +13,13 @@ This project uses Eclipse C/C++ for homebrew application development, and Citra 
 
 ### Purpose
 
-FPS Camera implemented using Euler Angles and simple matrix transformations. Note, Gimbal Lock is avoided due to not caring about Pitch on the X axis.
-
-Also aims to fix dynamic memory leak issues.
+Made Entities more flexible by individual basis.
 
 ### Results
 
 Citra 3DS Qt result:
 
-![](http://i.imgur.com/YZqbMVw.png)
+![](http://i.imgur.com/PUwDjzt.png)
 
 ### Known Issue
 
