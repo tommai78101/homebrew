@@ -25,16 +25,25 @@ namespace Engine {
 		
 		//Loading entities.
 		float radius = 3.0f;
-		for (int i = 0; i < 2; i++){
-			Entity t(vertexList, vertexListSize);
-			t.SetAngleXSpeed(1.0f * i + 1.0f);
-			t.SetPositionX(-radius);
-			t.SetPositionY(0.0f);
-			this->entityList.push_back(t);
+		for (int i = 0; i < 3; i++){
+			if (i == 0){
+				Floor e(vertexList, vertexListSize);
+				Entity* t = (Entity*) linearAlloc(sizeof(e));
+				std::memcpy(t, &e, sizeof(e));
+				t->SetPositionX(0.0f);
+				t->SetPositionY(-5.0f);
+				this->entityList.push_back(t);
+			}
+			else {
+				Entity e(vertexList, vertexListSize);
+				Entity* t = (Entity*) linearAlloc(sizeof(e));
+				std::memcpy(t, &e, sizeof(e));
+				t->SetAngleXSpeed(1.0f + (i * 2.0f));
+				t->SetPositionX(-radius * (i + 1));
+				t->SetPositionY(0.0f);
+				this->entityList.push_back(t);
+			}
 		}
-		Floor f(vertexList, vertexListSize);
-		f.SetPositionY(0.0f);
-		this->entityList.push_back(f);
 		
 		//Initializing view matrix.
 		Mtx_Identity(&this->viewMatrix);
@@ -46,12 +55,25 @@ namespace Engine {
 	Core::~Core(){
 		this->output->Print("Deinitializing core.");
 		
+		//Deleting allocated memory
+		while (!this->entityList.empty()){
+			linearFree(this->entityList[0]);
+			this->entityList.erase(this->entityList.begin());
+		}
+		
 		//Exiting scene
 		this->SceneExit();
 		
 		//Deinitializing graphics
 		C3D_Fini();
 	}
+	
+	Core& Core::GetInstance() {
+		static Output output;
+		static Core core(&output);
+		return core;
+	}
+	
 	
 	void Core::Initialize(){
 		this->output->Print("Initializing core.");
@@ -144,17 +166,17 @@ namespace Engine {
 		//Draw the vertex buffer objects.                     
 		for (size_t i = 0; i < this->entityList.size(); i++){ 
 			//Switch buffers
-			this->entityList[i].ConfigureBuffer();
+			this->entityList[i]->ConfigureBuffer();
 		
 			//Calculate model view matrix.
 			Mtx_Identity(&modelMatrix);
-			this->entityList[i].RenderUpdate(&modelMatrix);
+			this->entityList[i]->RenderUpdate(&modelMatrix);
 			
 			//Update to shader program.
 			C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_model, &modelMatrix);
 			
 			//Render entity.
-			this->entityList[i].Render();
+			this->entityList[i]->Render();
 		}
 	}
 	
@@ -220,7 +242,7 @@ namespace Engine {
 		
 		//Entity updates go here.
 		for (size_t i = 0; i < this->entityList.size(); i++){
-			this->entityList[i].Update();
+			this->entityList[i]->Update();
 		}
 	}
 	

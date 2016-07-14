@@ -27,9 +27,11 @@ namespace Engine {
 		Entity(const Entity& copy);
 		virtual ~Entity();
 		
-		//Actions
+		//Virtual methods
 		virtual void Update();
 		virtual void RenderUpdate(C3D_Mtx* modelMatrix);
+		
+		//Methods
 		void Render();
 		void ConfigureBuffer();
 		

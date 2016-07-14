@@ -4,6 +4,7 @@
 #	define FLOOR_HEADER
 
 #include "../utility/common.h"
+#include "../engine/core.h"
 #include "entity.h"
 
 namespace Engine {
@@ -15,8 +16,8 @@ namespace Engine {
 		Floor(const Floor& copy);
 		~Floor();
 		
-		void Update() override;
-		void RenderUpdate(C3D_Mtx* modelMatrix) override;
+		virtual void Update() override;
+		virtual void RenderUpdate(C3D_Mtx* modelMatrix) override;
 	};
 };
 

@@ -5,7 +5,6 @@ namespace Engine {
 	}
 	
 	Floor::Floor(const Floor& copy) : Entity(copy) {
-		
 	}
 	
 	Floor::~Floor() {
@@ -13,10 +12,9 @@ namespace Engine {
 	}
 	
 	void Floor::Update(){
-		
 	}
 	
 	void Floor::RenderUpdate(C3D_Mtx* modelMatrix) {
-		Mtx_Scale(modelMatrix, 10.0f, 0.0f, 0.0f);
+		Mtx_Scale(modelMatrix, 10.0f, 1.0f, 1.0f);
 	}
 };

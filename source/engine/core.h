@@ -25,7 +25,7 @@ namespace Engine {
 		float rotationY;
 		float playerSpeed;
 		
-		std::vector<Entity> entityList;
+		std::vector<Entity*> entityList;
 		
 		Output* output;
 		
@@ -40,6 +40,15 @@ namespace Engine {
 		DVLB_s* vertexShader_dvlb;
 		shaderProgram_s program;
 		
+		//Singleton.
+		//Constructor/Destructor.
+		Core(Output* output);
+		~Core();
+		
+		//Discarding methods we don't want. (C++03)
+		Core(Core const&);
+		void operator=(Core const&);
+		
 		//Action functions.
 		void Initialize();
 		void SceneInitialize();
@@ -47,14 +56,18 @@ namespace Engine {
 		void SceneExit();
 		
 	public:
-		Core(Output* output);
-		~Core();
+		//Singleton.
+		static Core& GetInstance();
 		
-		//Important Action functions
+		//Discarding methods we don't want. (C++11)
+		//Core(Core const&) = delete;
+		//void operator=(Core const&) = delete;
+		
+		//Important Action functions.
 		void Update(u32 keyDown, u32 keyHeld, u32 keyUp);
 		void Render();
 		
-		//Getter/Setters
+		//Getter/Setters.
 		Output* GetOutput() const;
 	};
 };
