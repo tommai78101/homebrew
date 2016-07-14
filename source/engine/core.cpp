@@ -24,20 +24,7 @@ namespace Engine {
 		this->vertexShader_dvlb = nullptr;
 		
 		//Loading entities.
-		float radius = 3.0f;
-		for (int i = 0; i < 3; i++){
-			if (i == 0){
-				Floor e(vertexList, vertexListSize);
-				e.posY = -5.0f;
-				AddEntity(&e);
-			}
-			else {
-				Entity e(vertexList, vertexListSize);
-				e.SetAngleXSpeed(i + 1.0f);
-				e.posX = radius * (i+1);
-				AddEntity(&e);
-			}
-		}
+		this->LoadEntities();
 		
 		//Initializing view matrix.
 		Mtx_Identity(&this->viewMatrix);
@@ -180,6 +167,24 @@ namespace Engine {
 		//Free shader program
 		shaderProgramFree(&this->program);
 		DVLB_Free(this->vertexShader_dvlb);
+	}
+	
+	//Loads all game entities here.
+	void Core::LoadEntities() {
+		float radius = 3.0f;
+		for (int i = 0; i < 3; i++){
+			if (i == 0){
+				Floor e(vertexList, vertexListSize);
+				e.posY = -5.0f;
+				AddEntity(&e);
+			}
+			else {
+				Entity e(vertexList, vertexListSize);
+				e.SetAngleXSpeed(i + 1.0f);
+				e.posX = radius * (i+1);
+				AddEntity(&e);
+			}
+		}
 	}
 	
 	//This is for game logic, and not for updating game render updates.

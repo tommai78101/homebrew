@@ -60,6 +60,7 @@ namespace Engine {
 		static Core& GetInstance();
 		
 		//Important Action functions.
+		void LoadEntities();
 		void Update(u32 keyDown, u32 keyHeld, u32 keyUp);
 		void Render();
 		
