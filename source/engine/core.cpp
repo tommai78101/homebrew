@@ -273,14 +273,21 @@ namespace Engine {
 	//Helper methods
 	//Method parameter length will surely be off the screen.
 	void Core::AddEntity(Entity entity, 
-			float positionX, float positionY, float positionY, 
+			float positionX, float positionY, float positionZ, 
 			float rotationX = 0.0f, float rotationY = 0.0f, float rotationZ = 0.0f, 
 			float scaleX = 1.0f, float scaleY = 1.0f, float scaleZ = 1.0f)
 	{
 		Entity* t = (Entity*) linearAlloc(sizeof(entity));
 		std::memcpy(t, &entity, sizeof(entity));
-		t->SetPositionX(positionX);
-		t->SetPositionY(positionY);
+		t->posX = positionX;
+		t->posY = positionY;
+		t->posZ = positionZ;
+		t->rotX = rotationX;
+		t->rotY = rotationY;
+		t->rotZ = rotationZ;
+		t->scaleX = scaleX;
+		t->scaleY = scaleX;
+		t->scaleZ = scaleX;
 		this->entityList.push_back(t);
 	}
 };
