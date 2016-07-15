@@ -25,6 +25,12 @@ namespace Engine {
 		float rotationX;
 		float rotationY;
 		float playerSpeed;
+		u16 oldTouchX;
+		u16 oldTouchY;
+		u16 offsetTouchX;
+		u16 offsetTouchY;
+		u16 touchX;
+		u16 touchY;
 		
 		std::vector<Entity*> entityList;
 		
@@ -43,7 +49,8 @@ namespace Engine {
 		
 		//Singleton.
 		//Constructor/Destructor.
-		Core(Output* output);
+		//w = width, h = height, t = touch screen.
+		Core(Output* output, u16 w, u16 h, u16 tw, u16 th);
 		~Core();
 		
 		//Discarding methods we don't want. (C++03)
@@ -60,9 +67,15 @@ namespace Engine {
 		//Singleton.
 		static Core& GetInstance();
 		
+		//Game viewport width, height. Public data. Not to be changed/modified.
+		const u16 screenWidth;
+		const u16 screenHeight;
+		const u16 touchScreenWidth;
+		const u16 touchScreenHeight;
+		
 		//Important Action functions.
 		void LoadEntities();
-		void Update(u32 keyDown, u32 keyHeld, u32 keyUp);
+		void Update(u32 keyDown, u32 keyHeld, u32 keyUp, touchPosition touchInput);
 		void Render();
 		
 		//Helper methods

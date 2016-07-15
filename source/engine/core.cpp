@@ -1,7 +1,9 @@
 #include "core.h"
 
 namespace Engine {
-	Core::Core(Output* out) {
+	Core::Core (Output* out, u16 width, u16 height, u16 touchWidth, u16 touchHeight) : 
+	screenWidth(width), screenHeight(height), touchScreenWidth(touchWidth), touchScreenHeight(touchHeight) 
+	{
 		//Setting up/Initializing all variables.
 		this->output = out;
 		
@@ -11,6 +13,14 @@ namespace Engine {
 		this->rotationX = 0.0f;
 		this->rotationY = 0.0f;
 		this->playerSpeed = 0.05f;
+		
+		//Touchscreen.
+		this->oldTouchX = 0;
+		this->oldTouchY = 0;
+		this->offsetTouchX = 0;
+		this->offsetTouchY = 0;
+		this->touchX = width / 2;
+		this->touchY = height / 2;
 		
 		//Uniform location pointers for the shaders.
 		this->uLoc_projection = 0;
@@ -52,8 +62,13 @@ namespace Engine {
 	
 	//Singleton for getting the engine instance.
 	Core& Core::GetInstance() {
+		//Game viewport initialization.
+		u16 width, height, touchWidth, touchHeight;
+		gfxGetFramebuffer(GFX_TOP, GFX_LEFT, &width, &height);
+		gfxGetFramebuffer(GFX_BOTTOM, GFX_LEFT, &touchWidth, &touchHeight);
+		
 		static Output output;
-		static Core core(&output);
+		static Core core(&output, width, height, touchWidth, touchHeight);
 		return core;
 	}
 	
@@ -191,7 +206,7 @@ namespace Engine {
 	}
 	
 	//This is for game logic, and not for updating game render updates.
-	void Core::Update(u32 keyDown, u32 keyHeld, u32 keyUp){
+	void Core::Update(u32 keyDown, u32 keyHeld, u32 keyUp, touchPosition touchInput){
 		//Output Controls.
 		if (keyDown & KEY_B){
 			this->output->SetReverseFlag(!this->output->GetReverseFlag());
@@ -248,6 +263,41 @@ namespace Engine {
 			else if (keyHeld & KEY_RIGHT){
 				this->camX += cosf(this->rotationY) * this->playerSpeed;
 				this->camZ += sinf(this->rotationY) * this->playerSpeed;
+			}
+			
+			//Touchscreen cursor sensitivity. May need tweaking.
+			//Akin to mouse sensitivity in FPS games.
+			float sensitivity = 256.0f;
+			
+			//Touchscreen cursor offset positioning (aka. dragging)
+			//We flipped the X and Y around, because we're using this for rotation, not position.
+			//X = Pitch or rotation on the X axis.
+			//Y = Yaw or rotation on the Y axis.
+			//When releasing touch input, the value will default back to 0. Therefore, we need to check on
+			//KEY_TOUCH to detect touchscreen press/hold/release events.
+			if (keyDown & KEY_TOUCH){
+				this->oldTouchX = touchInput.py;
+				this->oldTouchY = touchInput.px;
+			}
+			else if (keyHeld & KEY_TOUCH){
+				this->offsetTouchY = this->oldTouchY - touchInput.px;
+				this->offsetTouchX = this->oldTouchX - touchInput.py;
+				
+				//Inverted Pitch (X axis) 
+				//There exists this method of calculating overall rotation for rotation X, Y, in 1 line of code:
+				this->rotationX = -degToRad((((float) (this->offsetTouchX + this->touchX) * sensitivity / 65536.0f) * 180.0f) - 90.0f);
+				this->rotationY = degToRad((((float) (this->offsetTouchY + this->touchY) * sensitivity / 65536.0f) * 360.0f) - 180.0f);
+				
+			}
+			else if (keyUp & KEY_TOUCH) {
+				//Adding offset to the main touch coordinates.
+				this->touchX += this->offsetTouchX;
+				this->touchY += this->offsetTouchY;
+				
+				//Applying same rotation, so as to get a smoother transition from Hold to Release button events.
+				//This is optional, by the way.
+				this->rotationX = -degToRad((((float) this->touchX * sensitivity / 65536.0f) * 180.0f) - 90.0f);
+				this->rotationY = degToRad((((float) this->touchY * sensitivity / 65536.0f) * 360.0f) - 180.0f);
 			}
 		}
 		
