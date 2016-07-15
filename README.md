@@ -26,9 +26,7 @@ Controls:
 
 ### Results
 
-Citra.exe (non-Qt) can now do Hardware Rendering. (This message will disappear in subsequent updates.)
-
-![](http://i.imgur.com/0Pe7FMh.png)
+![](http://i.imgur.com/K63sUHe.png)
 
 ### Building
 

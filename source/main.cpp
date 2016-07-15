@@ -12,9 +12,10 @@ int main() {
 	output->Print(" ");
 	output->Print(" ");
 	output->Print("Citro3D Tutorial Demo");
-	output->Print("Written by wedr");
+	output->Print("Written by tom_mai78101");
 	output->Print(" ");
 	output->Print("Special thanks to:");
+	output->Print("Stary2001, wedr, nich, Cruel`,");
 	output->Print("#3dsdev, #3dshacks, fincs, smealum");
 	output->Print("/r/gamedev, /r/3dshacks, Reddit");
 	output->Print(" ");
