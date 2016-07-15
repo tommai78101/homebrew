@@ -162,7 +162,7 @@ sideload: cia
 	@3dslink $(TARGET).3dsx
 	@echo "Sideloading Complete!"
 	
-citra: all
+citra: $(BUILD)
 	@echo "... citra ..."
 	@/c/devkitPro/msys/home/Thompson/projects/citra/build/bin/Debug/citra.exe $(TARGET).3dsx &
 	@echo "Citra Complete!"
