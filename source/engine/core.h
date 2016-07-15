@@ -22,6 +22,7 @@ namespace Engine {
 		int uLoc_view;
 		float camX;
 		float camZ;
+		float rotationX;
 		float rotationY;
 		float playerSpeed;
 		

@@ -8,6 +8,7 @@ namespace Engine {
 		//Player coordinates and properties.
 		this->camX = 0.0f;
 		this->camZ = 0.0f;
+		this->rotationX = 0.0f;
 		this->rotationY = 0.0f;
 		this->playerSpeed = 0.05f;
 		
@@ -139,6 +140,7 @@ namespace Engine {
 		                                                   
 		//Do something about view matrix.
 		Mtx_Identity(&this->viewMatrix);
+		Mtx_RotateX(&this->viewMatrix, this->rotationX, true);
 		Mtx_RotateY(&this->viewMatrix, this->rotationY, true);
 		Mtx_Translate(&this->viewMatrix, -this->camX, 0.0f, -this->camZ);
 		
@@ -197,16 +199,55 @@ namespace Engine {
 		}
 		
 		//Game Controls
-		if (keyHeld & KEY_LEFT){
-			this->rotationY -= radian;
-			if (this->rotationY < degToRad(-180.0f)){
-				this->rotationY = degToRad(180.0f);
+		
+		//FPS Camera Facing.
+		if (keyHeld & KEY_L){
+			if (keyHeld & KEY_LEFT){
+				this->rotationY -= radian;
+				if (this->rotationY < degToRad(-180.0f)){
+					this->rotationY = degToRad(180.0f);
+				}
+			}
+			else if (keyHeld & KEY_RIGHT){
+				this->rotationY += radian;
+				if (this->rotationY > degToRad(180.0f)){
+					this->rotationY = degToRad(-180.0f);
+				}
+			}
+			else if (keyHeld & KEY_UP){
+				this->rotationX += radian;
+				if (this->rotationX > degToRad(89.9f)){
+					this->rotationX = degToRad(89.9f);
+				}
+			}
+			else if (keyHeld & KEY_DOWN){
+				this->rotationX -= radian;
+				if (this->rotationX < degToRad(-89.9f)){
+					this->rotationX = degToRad(-89.9f);
+				}
 			}
 		}
-		else if (keyHeld & KEY_RIGHT){
-			this->rotationY += radian;
-			if (this->rotationY > degToRad(180.0f)){
-				this->rotationY = degToRad(-180.0f);
+		else {
+			//FPS Camera Forward Movement.
+			//Forward uses the cosine and sine calculations for traversing on the 
+			//Cartesian coordinates, X, and Z axes.
+			//Note strafing reverses the ordering of cosine and sine calculations, because
+			//The cosine and sine calculations are rotated by 90 degrees counterclockwise.
+			if (keyHeld & KEY_UP){
+				this->camX += sinf(this->rotationY) * this->playerSpeed;
+				this->camZ -= cosf(this->rotationY) * this->playerSpeed;
+			}
+			else if (keyHeld & KEY_DOWN){
+				this->camX -= sinf(this->rotationY) * this->playerSpeed;
+				this->camZ += cosf(this->rotationY) * this->playerSpeed;
+			}
+			else if (keyHeld & KEY_LEFT){
+				this->camX -= cosf(this->rotationY) * this->playerSpeed;
+				this->camZ -= sinf(this->rotationY) * this->playerSpeed;
+			}
+			else if (keyHeld & KEY_RIGHT){
+				this->camX += cosf(this->rotationY) * this->playerSpeed;
+				this->camZ += sinf(this->rotationY) * this->playerSpeed;
 			}
 		}
 		
@@ -216,28 +257,6 @@ namespace Engine {
 		}
 		else if (keyUp & KEY_A){
 			this->playerSpeed = 0.05f;
-		}
-		
-		//FPS Camera Movement.
-		//Forward uses the cosine and sine calculations for traversing on the 
-		//Cartesian coordinates, X, and Z axes.
-		//Note strafing reverses the ordering of cosine and sine calculations, because
-		//The cosine and sine calculations are rotated by 90 degrees counterclockwise.
-		if (keyHeld & KEY_L){
-			this->camX -= cosf(this->rotationY) * this->playerSpeed;
-			this->camZ -= sinf(this->rotationY) * this->playerSpeed;
-		}
-		else if (keyHeld & KEY_R){
-			this->camX += cosf(this->rotationY) * this->playerSpeed;
-			this->camZ += sinf(this->rotationY) * this->playerSpeed;
-		}
-		else if (keyHeld & KEY_UP){
-			this->camX += sinf(this->rotationY) * this->playerSpeed;
-			this->camZ -= cosf(this->rotationY) * this->playerSpeed;
-		}
-		else if (keyHeld & KEY_DOWN){
-			this->camX -= sinf(this->rotationY) * this->playerSpeed;
-			this->camZ += cosf(this->rotationY) * this->playerSpeed;
 		}
 		
 		//Entity updates go here.
