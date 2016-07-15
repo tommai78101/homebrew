@@ -17,7 +17,7 @@ Implemented touchscreen camera controls.
 
 Controls:
 
-* Use touchscreen to look around.
+* Use touchscreen to look around. 
 * Hold L and use C-Stick to look around.  
 * Use C-Stick to move around.   
 * Hold A to run/move quicker.   
