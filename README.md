@@ -13,13 +13,16 @@ This project uses Eclipse C/C++ for homebrew application development, and Citra 
 
 ### Purpose
 
-Added an actual floor, and make FPS camera be able to look up/down. 
+Implemented touchscreen camera controls.
 
 Controls:
 
-* Hold L to look around with directional pads.  
-* Press any directional pads to move around.   
+* Use touchscreen to look around.
+* Hold L and use C-Stick to look around.  
+* Use C-Stick to move around.   
 * Hold A to run/move quicker.   
+* Press B to reverse Console orientation.
+* Press Start to quit.
 
 ### Results
 
