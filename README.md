@@ -13,19 +13,19 @@ This project uses Eclipse C/C++ for homebrew application development, and Citra 
 
 ### Purpose
 
-Made Entities more flexible by individual basis.
+Added an actual floor, and make FPS camera be able to look up/down. 
+
+Controls:
+
+* Hold L to look around with directional pads.  
+* Press any directional pads to move around.   
+* Hold A to run/move quicker.   
 
 ### Results
 
-Citra 3DS Qt result:
+Citra.exe (non-Qt) can now do Hardware Rendering. (This message will disappear in subsequent updates.)
 
-![](http://i.imgur.com/PUwDjzt.png)
-
-### Known Issue
-
-* Do not run with citra.exe (Non-Qt build), as it does not support hardware rendering nor is it configurable.
-
-![](http://i.imgur.com/fIGscMk.png)
+![](http://i.imgur.com/0Pe7FMh.png)
 
 ### Building
 
