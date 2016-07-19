@@ -15,7 +15,7 @@ int main() {
 	output->Print("Written by tom_mai78101");
 	output->Print(" ");
 	output->Print("Special thanks to:");
-	output->Print("Stary2001, wedr, nich, Cruel`,");
+	output->Print("Stary2001, wedr, nich, Cruel`, Koopa,");
 	output->Print("#3dsdev, #3dshacks, fincs, smealum");
 	output->Print("/r/gamedev, /r/3dshacks, Reddit");
 	output->Print(" ");
