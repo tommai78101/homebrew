@@ -10,6 +10,7 @@
 #include "../utility/output.h"
 #include "../entity/entity.h"
 #include "../entity/floor.h"
+#include "../entity/gameobject.h"
 
 
 //Engine namespace

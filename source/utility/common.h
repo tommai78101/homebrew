@@ -11,6 +11,9 @@
 #include <vector>
 #include <cmath>
 #include <array>
+#include <memory>
+#include <type_traits>
+#include <utility>
 
 //3DS standard header
 #include <3ds.h>
