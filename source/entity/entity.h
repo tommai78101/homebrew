@@ -7,6 +7,30 @@
 #include "../utility/common.h"
 
 namespace Engine {
+	
+	//-----------------------------  Components  ----------------------------------------
+	
+	struct Component {
+		//There should be nothing in this base class.
+	};
+	
+	class PhysicsComponent : public Component {
+	protected:
+		float accelerationX, accelerationY, accelerationZ;
+		float velocityX, velocityY, velocityZ;
+		float positionX, positionY, positionZ;
+		const float GravityZ = 0.4f;
+		
+	public:
+		PhysicsComponent(){
+			this->accelerationX = this->accelerationY = this->accelerationZ = 0.0f;
+			this->velocityX = this->velocityY = this->velocityZ = 0.0f;
+			this->positionX = this->positionY = this->positionZ = 0.0f;
+		}
+	};
+	
+	//-------------------------------  Entity  ------------------------------------------	
+	
 	class Entity {
 	protected:
 		bool updateFlag;
@@ -30,6 +54,9 @@ namespace Engine {
 		float scaleY;
 		float scaleZ;
 		
+		//Public Entity-Component System components list.
+		std::vector<std::unique_ptr<Component>> components;
+		
 		
 		//RAII requirements.
 		Entity(const Vertex list[], int size);
@@ -43,6 +70,10 @@ namespace Engine {
 		//Methods
 		void Render();
 		void ConfigureBuffer();
+		
+		//Creators
+		template<typename T>
+		T& CreateComponent();
 		
 		//Setter
 		void SetRenderFlag(bool value);

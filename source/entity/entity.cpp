@@ -93,6 +93,16 @@ namespace Engine {
 		BufInfo_Add(bufferInfo, this->vertexBuffer, sizeof(Vertex), 3, 0x210); 
 	}
 	
+	//Entity-Component System Component Creator
+	template<typename T>
+	T& Entity::CreateComponent(){
+		auto& result = std::unique_ptr<T>(new T());
+		static_assert(std::is_base_of<Component, T>::value, "Derived class is not subclass of Component class.");
+		this->components.push_back(result);
+		return *result;
+	}
+	
+	
 	u32 Entity::GetListSize() const {
 		return this->listElementSize;
 	}
