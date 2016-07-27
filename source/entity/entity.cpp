@@ -1,6 +1,47 @@
 #include "entity.h"
 
 namespace Engine {
+	Component::~Component(){
+		
+	}
+	
+	void Component::SetParent(Entity& parent){
+		//No copying as temporary parent data. Always get that one true parent.
+		this->parent = &parent;
+	}
+	
+	Entity* Component::GetParent() const {
+		//Returns only the parent that was passed into SetParent(Entity&).
+		return this->parent;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	PhysicsComponent::PhysicsComponent(){
+		this->accelerationX = this->accelerationY = this->accelerationZ = 0.0f;
+		this->velocityX = this->velocityY = this->velocityZ = 0.0f;
+		this->positionX = this->positionY = this->positionZ = 0.0f;
+	}
+	
+	void PhysicsComponent::Update() {
+		if (this->accelerationY < this->GravityZ){
+			this->accelerationY += this->GravityZ / 30.0f;
+		}
+		this->velocityX += this->accelerationX;
+		this->velocityY += this->accelerationY;
+		this->velocityZ += this->accelerationZ;
+		this->positionX += this->velocityX;
+		this->positionY += this->velocityY;
+		this->positionZ += this->velocityZ;
+	}
+	
+	void PhysicsComponent::RenderUpdate(C3D_Mtx* modelMatrix){
+		Mtx_Translate(modelMatrix, this->positionX, this->positionY, 0.0f);
+	}
+	
+	
+	//--------------------------------------------------------------------
+	
 	Entity::Entity(const Vertex list[], int size) {
 		//Setting array element size.
 		this->listElementSize = size;
@@ -30,9 +71,12 @@ namespace Engine {
 		this->scaleX = 0.0f;
 		this->scaleY = 0.0f;
 		this->scaleZ = 0.0f;
+		
+		//Entity-Component stuffs.
+		this->components.clear();
 	}
 	
-	Entity::Entity(const Entity& copy){
+	Entity::Entity(const Entity& copy) {
 		//Copying everything over.
 		this->posX = copy.posX;
 		this->posY = copy.posY;
@@ -51,6 +95,9 @@ namespace Engine {
 		this->angleXSpeed = copy.angleXSpeed;
 		this->vertexBuffer = linearAlloc(copy.vertexListSize);
 		std::memcpy(this->vertexBuffer, copy.vertexBuffer, copy.vertexListSize);
+		
+		//Copying vector of unique_ptr to another vector
+		this->components = copy.components;
 	}
 	
 	Entity::~Entity(){
@@ -68,12 +115,18 @@ namespace Engine {
 			}
 			this->posX = 3.0f * cosf(this->rotX);
 			this->posY = 3.0f * sinf(this->rotX);
+			
+			for (size_t i = 0; i < this->components.size(); i++){
+				this->components[i]->Update();				
+			}
 		}
 	}
 	
 	void Entity::RenderUpdate(C3D_Mtx* modelMatrix) {
 		//This update function will update entity properties.
-		Mtx_Translate(modelMatrix, this->posX, this->posY, 0.0f);
+		for (size_t i = 0; i < this->components.size(); i++){
+			this->components[i]->RenderUpdate(modelMatrix);
+		}
 	}
 	
 	void Entity::Render(){
@@ -98,7 +151,15 @@ namespace Engine {
 	T& Entity::CreateComponent(){
 		auto& result = std::unique_ptr<T>(new T());
 		static_assert(std::is_base_of<Component, T>::value, "Derived class is not subclass of Component class.");
-		this->components.push_back(result);
+		this->components.push_back(std::move(result));
+		return *result;
+	}
+	
+	template<typename T, typename... TArgs>
+	T& Entity::CreateComponent(TArgs&&... args){
+		auto& result = std::unique_ptr<T>(new T(std::forward(args...)));
+		static_assert(std::is_base_of<Component, T>::value, "Derived class is not subclass of Component class.");
+		this->components.push_back(std::move(result));
 		return *result;
 	}
 	

@@ -7,11 +7,19 @@
 #include "../utility/common.h"
 
 namespace Engine {
+	class Entity; 
 	
 	//-----------------------------  Components  ----------------------------------------
 	
 	struct Component {
-		//There should be nothing in this base class.
+		Entity* parent;
+		
+		virtual ~Component();
+		virtual void Update() = 0;
+		virtual void RenderUpdate(C3D_Mtx* modelMatrix) = 0;
+		
+		void SetParent(Entity& parent);
+		Entity* GetParent() const;
 	};
 	
 	class PhysicsComponent : public Component {
@@ -22,11 +30,9 @@ namespace Engine {
 		const float GravityZ = 0.4f;
 		
 	public:
-		PhysicsComponent(){
-			this->accelerationX = this->accelerationY = this->accelerationZ = 0.0f;
-			this->velocityX = this->velocityY = this->velocityZ = 0.0f;
-			this->positionX = this->positionY = this->positionZ = 0.0f;
-		}
+		PhysicsComponent();
+		void Update() override;
+		void RenderUpdate(C3D_Mtx* modelMatrix) override;
 	};
 	
 	//-------------------------------  Entity  ------------------------------------------	
@@ -55,7 +61,7 @@ namespace Engine {
 		float scaleZ;
 		
 		//Public Entity-Component System components list.
-		std::vector<std::unique_ptr<Component>> components;
+		std::vector<Component*> components;
 		
 		
 		//RAII requirements.
@@ -72,8 +78,8 @@ namespace Engine {
 		void ConfigureBuffer();
 		
 		//Creators
-		template<typename T>
-		T& CreateComponent();
+		template<typename T> T& CreateComponent();
+		template<typename T, typename... TArgs> T& CreateComponent(TArgs&&... args);
 		
 		//Setter
 		void SetRenderFlag(bool value);
