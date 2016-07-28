@@ -39,6 +39,11 @@ namespace Engine {
 		Mtx_Translate(modelMatrix, this->positionX, this->positionY, 0.0f);
 	}
 	
+	//Polymorphic cloning pattern with smart pointers.
+	std::unique_ptr<Component> PhysicsComponent::Clone() const {
+		return std::unique_ptr<Component>(new PhysicsComponent(*this));
+	}
+	
 	
 	//--------------------------------------------------------------------
 	
@@ -96,8 +101,10 @@ namespace Engine {
 		this->vertexBuffer = linearAlloc(copy.vertexListSize);
 		std::memcpy(this->vertexBuffer, copy.vertexBuffer, copy.vertexListSize);
 		
-		//Copying vector of unique_ptr to another vector
-		this->components = copy.components;
+		//Polymorphic cloning pattern with smart pointers.
+		for(size_t i = 0; i < copy.components.size(); i++){
+			this->components.push_back(copy.components[i]->Clone());
+		}
 	}
 	
 	Entity::~Entity(){
@@ -145,24 +152,6 @@ namespace Engine {
 		BufInfo_Init(bufferInfo);                                    
 		BufInfo_Add(bufferInfo, this->vertexBuffer, sizeof(Vertex), 3, 0x210); 
 	}
-	
-	//Entity-Component System Component Creator
-	template<typename T>
-	T& Entity::CreateComponent(){
-		auto& result = std::unique_ptr<T>(new T());
-		static_assert(std::is_base_of<Component, T>::value, "Derived class is not subclass of Component class.");
-		this->components.push_back(std::move(result));
-		return *result;
-	}
-	
-	template<typename T, typename... TArgs>
-	T& Entity::CreateComponent(TArgs&&... args){
-		auto& result = std::unique_ptr<T>(new T(std::forward(args...)));
-		static_assert(std::is_base_of<Component, T>::value, "Derived class is not subclass of Component class.");
-		this->components.push_back(std::move(result));
-		return *result;
-	}
-	
 	
 	u32 Entity::GetListSize() const {
 		return this->listElementSize;

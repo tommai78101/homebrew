@@ -189,7 +189,7 @@ namespace Engine {
 	
 	//Loads all game entities here.
 	void Core::LoadEntities() {
-		float radius = 3.0f;
+		//float radius = 3.0f;
 		for (int i = 0; i < 3; i++){
 			if (i == 0){
 				Floor e(vertexList, vertexListSize);
@@ -198,8 +198,7 @@ namespace Engine {
 			}
 			else {
 				Entity e(vertexList, vertexListSize);
-				e.SetAngleXSpeed(i + 1.0f);
-				e.posX = radius * (i+1);
+				e.CreateComponent<PhysicsComponent>();
 				AddEntity(&e);
 			}
 		}

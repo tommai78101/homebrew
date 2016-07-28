@@ -18,6 +18,9 @@ namespace Engine {
 		virtual void Update() = 0;
 		virtual void RenderUpdate(C3D_Mtx* modelMatrix) = 0;
 		
+		//Polymorphic cloning pattern with smart pointers.
+		virtual std::unique_ptr<Component> Clone() const = 0;
+		
 		void SetParent(Entity& parent);
 		Entity* GetParent() const;
 	};
@@ -33,6 +36,9 @@ namespace Engine {
 		PhysicsComponent();
 		void Update() override;
 		void RenderUpdate(C3D_Mtx* modelMatrix) override;
+		
+		//Polymorphic cloning pattern with smart pointers.
+		virtual std::unique_ptr<Component> Clone() const override;
 	};
 	
 	//-------------------------------  Entity  ------------------------------------------	
@@ -61,7 +67,7 @@ namespace Engine {
 		float scaleZ;
 		
 		//Public Entity-Component System components list.
-		std::vector<Component*> components;
+		std::vector<std::unique_ptr<Component>> components;
 		
 		
 		//RAII requirements.
@@ -77,9 +83,29 @@ namespace Engine {
 		void Render();
 		void ConfigureBuffer();
 		
-		//Creators
-		template<typename T> T& CreateComponent();
-		template<typename T, typename... TArgs> T& CreateComponent(TArgs&&... args);
+		//Entity-Component System Component Creatora (they all go in the headers, per C++ standards)
+		template<typename T>
+		T& CreateComponent(){
+			static_assert(std::is_base_of<Component, T>::value, "Derived class is not subclass of Component class.");
+			auto result = std::unique_ptr<T>(new T());
+			this->components.push_back(std::move(result));
+			return *result;
+		}
+		
+		template<typename T, typename... TArgs>
+		T& CreateComponent(TArgs&&... args){
+			static_assert(std::is_base_of<Component, T>::value, "Derived class is not subclass of Component class.");
+			auto result = std::unique_ptr<T>(new T(std::forward(args...)));
+			this->components.push_back(std::move(result));
+			return *result;
+		}
+		
+		//Taken from:
+		//http://stackoverflow.com/a/27104183/1016891
+		template<class T>
+		std::unique_ptr<T> copy_unique(const std::unique_ptr<T>& source){
+			return source ? std::make_unique<T>(*source) : nullptr;
+		}
 		
 		//Setter
 		void SetRenderFlag(bool value);
