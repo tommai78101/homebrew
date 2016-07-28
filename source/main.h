@@ -3,9 +3,8 @@
 #ifndef MAIN_HEADER
 #	define MAIN_HEADER
 
-//Application headers
-#include "utility/common.h"
-#include "utility/output.h"
-#include "engine/core.h"
+#include "common.h"
+#include "entity/entity.h"
+#include "engine/engine.h"
 
 #endif
