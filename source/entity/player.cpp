@@ -3,9 +3,14 @@
 namespace Entity {
 	Player::Player(){
 		this->camX = 0.0f;
-		this->camZ = 10.0f;
+		this->camZ = 10.0f;		//Points  towards the positive Z axis. This also means default yaw orientation is positive Z.
 		this->rotationPitch = this->rotationYaw = degToRad(0.0f);
 		this->speed = 0.04f;
+		
+		//Other variables
+		this->offsetTouchX = this->offsetTouchY = 0.0f;
+		this->oldTouchX = this->oldTouchY = 0;
+		this->touchX = this->touchY = 0;
 	}
 
 	void Player::Update(u32 keyDown, u32 keyHeld, u32 keyUp, touchPosition touchInput){

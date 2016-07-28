@@ -62,11 +62,13 @@ namespace Entity {
 		//Entity-Component stuffs.
 		this->components.clear();
 	}
+	
+	GameObject::~GameObject(){ }
 
 	void GameObject::Update(){
 		for (size_t i = 0; i < this->components.size(); i++){
 			this->components[i]->Update();
-			this->components[i]->Out();
+			//this->components[i]->Out();
 		}
 	}
 
@@ -80,7 +82,10 @@ namespace Entity {
 
 	void GameObject::Release(){
 		//Freeing the allocated memory.
-		linearFree(this->vertexBuffer);
+		if (this->vertexBuffer){
+			std::cout << "Freeing allocated memory." << std::endl;
+			linearFree(this->vertexBuffer);
+		}
 	}
 
 	void GameObject::RenderUpdate(C3D_Mtx* modelMatrix){

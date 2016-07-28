@@ -33,7 +33,8 @@ namespace Entity {
 		void* vertexBuffer;
 		
 		GameObject(const Vertex list[], int size);
-
+		
+		virtual ~GameObject();
 		virtual void Update();
 		virtual void Render();
 		void Release();

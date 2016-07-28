@@ -1,5 +1,3 @@
-#pragma once
-
 #if __INTELLISENSE__
 typedef unsigned int __SIZE_TYPE__;
 typedef unsigned long __PTRDIFF_TYPE__;
