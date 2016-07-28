@@ -13,7 +13,7 @@ This project uses Eclipse C/C++ for homebrew application development, and Citra 
 
 ### Purpose
 
-Implemented Entity-Component System and separated Player Camera View from Core Engine. Also, learned a lot of C++11 smart pointers usage.
+Implemented Entity-Component System and separated Player Camera View from Core Engine. Also, learned a lot of C++11 smart pointers usage. Rewrote a ton of code, just to make it work. Caution: Application runs slowly due to constant string output.
 
 Controls:
 
@@ -21,7 +21,6 @@ Controls:
 * Hold L and use C-Stick to look around.  
 * Use C-Stick to move around.   
 * Hold A to run/move quicker.   
-* Press B to reverse Console orientation.
 * Press Start to quit.
 
 ### Results
