@@ -5,7 +5,7 @@
 
 Testing homebrew stuffs.
 
-This project uses Eclipse C/C++ for homebrew application development, and Citra 3DS emulator for homebrew debugging/testing.
+This project uses Eclipse C/C++ for homebrew application development, and Citra 3DS emulator for homebrew debugging/testing. Used Visual Studio 2015 for advanced debugging and refactoring code.
 
 ### Notes
 
@@ -13,7 +13,7 @@ This project uses Eclipse C/C++ for homebrew application development, and Citra 
 
 ### Purpose
 
-Implemented touchscreen camera controls.
+Implemented Entity-Component System and separated Player Camera View from Core Engine. Also, learned a lot of C++11 smart pointers usage.
 
 Controls:
 
