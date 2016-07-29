@@ -51,7 +51,7 @@ namespace Entity {
 
 	class GameObject {
 	public:
-		std::vector<std::unique_ptr<Component>> components;
+		std::vector<std::shared_ptr<Component>> components;
 		bool renderFlag, updateFlag;
 		u32 vertexListSize, listElementSize;
 		void* vertexBuffer;
@@ -67,13 +67,13 @@ namespace Entity {
 
 		template<typename Derived> void AddComponent(){
 			static_assert(std::is_base_of<Component, Derived>::value, "Derived class is not subclass of Component.");
-			auto result = std::unique_ptr<Derived>(new Derived());
+			auto result = std::shared_ptr<Derived>(new Derived());
 			this->components.push_back(std::move(result));
 		}
 		
 		template<typename Derived, typename... TArgs> void AddComponent(TArgs&&... args){
 			static_assert(std::is_base_of<Component, Derived>::value, "Derived class is not subclass of Component.");
-			auto result = std::unique_ptr<Derived>(new Derived(args...));
+			auto result = std::shared_ptr<Derived>(new Derived(args...));
 			this->components.push_back(std::move(result));
 		}
 	};
