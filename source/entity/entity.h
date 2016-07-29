@@ -6,7 +6,15 @@
 #include "../common.h"
 
 namespace Entity {
+	enum class ComponentType {
+		AbstractComponent,
+		PhysicsComponent
+	};
+	
 	struct Component {
+		ComponentType type;
+		
+		Component();
 		virtual ~Component();
 		virtual void Update() = 0;
 		virtual void RenderUpdate(C3D_Mtx* modelView) = 0;

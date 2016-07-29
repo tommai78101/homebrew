@@ -6,9 +6,7 @@ namespace Engine {
 		return core;
 	}
 
-	Core::~Core(){
-
-	}
+	Core::~Core(){ 	}
 
 	void Core::Initialize(){
 		std::cout << "Initializing core." << std::endl;
@@ -82,6 +80,10 @@ namespace Engine {
 	void Core::LoadObjects(){
 		std::cout << "Loading objects..." << std::endl;
 
+		//This is how you load game objects with customized components.
+		//You first declare a component, with your edited values.
+		//Then you add them in via the helper function, AddComponent<T>(), passing in components as arguments.
+		//This can be extended to full class object initializations.
 		for (int i = 0; i < 2; i++){
 			PhysicsComponent p;
 			p.py = 5.0f * i;
@@ -91,6 +93,8 @@ namespace Engine {
 			temp->AddComponent<PhysicsComponent>(p);
 			this->gameObjects.push_back(std::move(temp));
 		}
+		
+		
 	}
 
 	void Core::Update(u32 downKey, u32 heldKey, u32 upKey, touchPosition touch){

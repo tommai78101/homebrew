@@ -16,6 +16,7 @@
 #include <cmath>
 #include <array>
 #include <cstring>
+#include <typeinfo>
 
 typedef struct {
 	float positions[3];

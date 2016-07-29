@@ -1,16 +1,22 @@
 #include "entity.h"
 
 namespace Entity {
+	Component::Component() {
+		this->type = ComponentType::AbstractComponent;
+	}
+	
 	Component::~Component(){ }
 
 	//------------------------------------------------------------------------------------
 
 	PhysicsComponent::PhysicsComponent() {
+		this->type = ComponentType::PhysicsComponent;
 		ax = ay = az = vx = vy = vz = px = py = pz = 0.0f;
 		std::cout << "PhysicsComponent has been created." << std::endl;
 	}
 	
-	PhysicsComponent::PhysicsComponent(PhysicsComponent& copy){
+	PhysicsComponent::PhysicsComponent(PhysicsComponent& copy) {
+		this->type = copy.type;
 		this->ax = copy.ax;
 		this->ay = copy.ay;
 		this->az = copy.az;
