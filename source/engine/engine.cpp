@@ -93,6 +93,8 @@ namespace Engine {
 			temp->AddComponent<PhysicsComponent>(p);
 			this->gameObjects.push_back(temp);
 			
+			//This code shows how to fetch existing components and modify them.
+			//If the returned value is nullptr, then it means game object is missing that component.
 			std::shared_ptr<PhysicsComponent> s = temp->GetComponent<PhysicsComponent>();
 			s->px *= -20.0f;
 		}
