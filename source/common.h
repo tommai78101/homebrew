@@ -7,6 +7,7 @@
 #include <citro3d.h>
 
 #include <iostream>
+#include <cstdlib>
 #include <iomanip>
 #include <vector>
 #include <memory>
@@ -106,6 +107,26 @@ static inline float degToRad(float degrees){
 	return degrees * radian;
 }
 
+static inline std::string text(int row, int column, std::string message, u16 color = 37) {
+	std::stringstream ss;
+	ss << "\x1b[" << row << ";" << column << "H";
+	ss << "\x1b[" << color << "m";
+	ss << message;
+	ss << "\x1b[" << 37 << "m";
+	std::cout << ss.str() << std::endl;
+	return ss.str();
+}
+
+template <typename Type> std::string ToString(const Type& t){
+	std::ostringstream os;
+	os << t;
+	return os.str();
+}
+
+static const u16 BOTTOM_SCREEN_WIDTH = 320;
+static const u16 BOTTOM_SCREEN_HEIGHT = 240;
+static const u16 TOP_SCREEN_WIDTH = 400;
+static const u16 TOP_SCREEN_HEIGHT = 240;
 
 
 
