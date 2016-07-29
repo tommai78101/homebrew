@@ -8,7 +8,8 @@
 namespace Entity {
 	enum class ComponentType {
 		AbstractComponent,
-		PhysicsComponent
+		PhysicsComponent,
+		ScaleComponent
 	};
 	
 	struct Component {
@@ -17,7 +18,7 @@ namespace Entity {
 		Component();
 		virtual ~Component();
 		virtual void Update() = 0;
-		virtual void RenderUpdate(C3D_Mtx* modelView) = 0;
+		virtual void RenderUpdate(C3D_Mtx* modelMatrix) = 0;
 		virtual void Out() = 0;
 	};
 
@@ -30,9 +31,23 @@ namespace Entity {
 		PhysicsComponent(PhysicsComponent& copy);
 
 		void Update() override;
-		void RenderUpdate(C3D_Mtx* modelView) override;
+		void RenderUpdate(C3D_Mtx* modelMatrix) override;
 		void Out() override;
 	};
+	
+	class ScaleComponent : public Component {
+	public:
+		float scaleX, scaleY, scaleZ;
+		
+		ScaleComponent();
+		ScaleComponent(ScaleComponent& copy);
+		
+		void Update() override;
+		void RenderUpdate(C3D_Mtx* modelMatrix) override;
+		void Out() override;
+	};
+	
+	//--------------------------------------------------------------------------------------
 
 	class GameObject {
 	public:

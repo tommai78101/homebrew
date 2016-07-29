@@ -61,6 +61,28 @@ namespace Entity {
 	}
 
 	//------------------------------------------------------------------------------------
+	
+	ScaleComponent::ScaleComponent() {
+		this->type = ComponentType::ScaleComponent;
+		this->scaleX = this->scaleY = this->scaleZ = 1.0f;
+	}
+	
+	ScaleComponent::ScaleComponent(ScaleComponent& copy){
+		this->type = copy.type;
+		this->scaleX = copy.scaleX;
+		this->scaleY = copy.scaleY;
+		this->scaleZ = copy.scaleZ;
+	}
+	
+	void ScaleComponent::Update(){ }
+	
+	void ScaleComponent::RenderUpdate(C3D_Mtx* modelMatrix){
+		Mtx_Scale(modelMatrix, this->scaleX, this->scaleY, this->scaleZ);
+	}
+	
+	void ScaleComponent::Out() { }
+	
+	//------------------------------------------------------------------------------------
 
 	GameObject::GameObject(const Vertex list[], int size){
 		//Setting array element size.
