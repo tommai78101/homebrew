@@ -89,9 +89,12 @@ namespace Engine {
 			p.py = 5.0f * i;
 			p.px = i * 3.0f;
 		
-			std::unique_ptr<GameObject> temp(new GameObject(vertexList, vertexListSize));
+			std::shared_ptr<GameObject> temp(new GameObject(vertexList, vertexListSize));
 			temp->AddComponent<PhysicsComponent>(p);
-			this->gameObjects.push_back(std::move(temp));
+			this->gameObjects.push_back(temp);
+			
+			std::shared_ptr<PhysicsComponent> s = temp->GetComponent<PhysicsComponent>();
+			s->px *= -20.0f;
 		}
 		
 		

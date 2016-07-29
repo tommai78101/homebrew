@@ -76,6 +76,17 @@ namespace Entity {
 			auto result = std::shared_ptr<Derived>(new Derived(args...));
 			this->components.push_back(std::move(result));
 		}
+		
+		template<typename Derived> std::shared_ptr<Derived> GetComponent() {
+			static_assert(std::is_base_of<Component, Derived>::value, "Derived class is not subclass of Component.");
+			for (size_t i = 0; i < this->components.size(); i++){
+				Derived* result = static_cast<Derived*>(this->components[i].get());
+				if (result){
+					return std::static_pointer_cast<Derived>(this->components[i]);	
+				}
+			}
+			return nullptr;
+		}
 	};
 };
 

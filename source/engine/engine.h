@@ -34,7 +34,7 @@ namespace Engine {
 
 
 	public:
-		std::vector<std::unique_ptr<GameObject>> gameObjects;
+		std::vector<std::shared_ptr<GameObject>> gameObjects;
 
 		static Core& Instance();
 		~Core();
