@@ -65,16 +65,18 @@ namespace Entity {
 		void RenderUpdate(C3D_Mtx* modelMatrix);
 		void ConfigureBuffer();
 
-		template<typename Derived> void AddComponent(){
+		template<typename Derived> std::shared_ptr<Derived> AddComponent(){
 			static_assert(std::is_base_of<Component, Derived>::value, "Derived class is not subclass of Component.");
 			auto result = std::shared_ptr<Derived>(new Derived());
-			this->components.push_back(std::move(result));
+			this->components.push_back(result);
+			return result;
 		}
 		
-		template<typename Derived, typename... TArgs> void AddComponent(TArgs&&... args){
+		template<typename Derived, typename... TArgs> std::shared_ptr<Derived> AddComponent(TArgs&&... args){
 			static_assert(std::is_base_of<Component, Derived>::value, "Derived class is not subclass of Component.");
 			auto result = std::shared_ptr<Derived>(new Derived(args...));
-			this->components.push_back(std::move(result));
+			this->components.push_back(result);
+			return result;
 		}
 		
 		template<typename Derived> std::shared_ptr<Derived> GetComponent() {

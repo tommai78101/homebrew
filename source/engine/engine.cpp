@@ -99,7 +99,13 @@ namespace Engine {
 			s->px *= -20.0f;
 		}
 		
-		
+		std::shared_ptr<GameObject> floor(new GameObject(vertexList, vertexListSize));
+		std::shared_ptr<ScaleComponent> scale = floor->AddComponent<ScaleComponent>();
+		scale->scaleY = 0.01f;
+		scale->scaleX = scale->scaleZ = 10.0f;
+		std::shared_ptr<PhysicsComponent> physics = floor->AddComponent<PhysicsComponent>();
+		physics->py = -10.0f;
+		this->gameObjects.push_back(floor);
 	}
 
 	void Core::Update(u32 downKey, u32 heldKey, u32 upKey, touchPosition touch){
