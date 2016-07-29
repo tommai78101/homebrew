@@ -82,9 +82,15 @@ namespace Engine {
 	void Core::LoadObjects(){
 		std::cout << "Loading objects..." << std::endl;
 
-		std::unique_ptr<GameObject> temp(new GameObject(vertexList, vertexListSize));
-		temp->AddComponent<PhysicsComponent>();
-		this->gameObjects.push_back(std::move(temp));
+		for (int i = 0; i < 2; i++){
+			PhysicsComponent p;
+			p.py = 5.0f * i;
+			p.px = i * 3.0f;
+		
+			std::unique_ptr<GameObject> temp(new GameObject(vertexList, vertexListSize));
+			temp->AddComponent<PhysicsComponent>(p);
+			this->gameObjects.push_back(std::move(temp));
+		}
 	}
 
 	void Core::Update(u32 downKey, u32 heldKey, u32 upKey, touchPosition touch){

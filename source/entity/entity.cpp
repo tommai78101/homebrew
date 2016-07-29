@@ -9,15 +9,29 @@ namespace Entity {
 		ax = ay = az = vx = vy = vz = px = py = pz = 0.0f;
 		std::cout << "PhysicsComponent has been created." << std::endl;
 	}
+	
+	PhysicsComponent::PhysicsComponent(PhysicsComponent& copy){
+		this->ax = copy.ax;
+		this->ay = copy.ay;
+		this->az = copy.az;
+		this->vx = copy.vx;
+		this->vy = copy.vy;
+		this->vz = copy.vz;
+		this->px = copy.px;
+		this->py = copy.py;
+		this->pz = copy.pz;
+	}
 
 	void PhysicsComponent::Update(){
-		if (this->az > this->GravityY){
-			this->az += this->GravityY / 30.0f;
+		if (this->py < -5.0f) {
+			this->ay *= -0.5f;
+			this->vy *= -0.5f;
+			if (std::abs(this->ay) < 0.02f){
+				this->ay = 0.0f;
+			}
 		}
-
-		if (this->pz < -10.0f) {
-			this->az *= -1.0f;
-			this->vz *= -1.0f;
+		else if (this->ay > this->GravityY){
+			this->ay += this->GravityY / 30.0f;
 		}
 
 		this->vx += this->ax;

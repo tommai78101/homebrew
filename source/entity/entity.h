@@ -19,6 +19,7 @@ namespace Entity {
 		const float GravityY = -0.4f;
 
 		PhysicsComponent();
+		PhysicsComponent(PhysicsComponent& copy);
 
 		void Update() override;
 		void RenderUpdate(C3D_Mtx* modelView) override;
@@ -41,12 +42,16 @@ namespace Entity {
 		void RenderUpdate(C3D_Mtx* modelMatrix);
 		void ConfigureBuffer();
 
-		template<typename Derived> Derived& AddComponent(){
+		template<typename Derived> void AddComponent(){
 			static_assert(std::is_base_of<Component, Derived>::value, "Derived class is not subclass of Component.");
 			auto result = std::unique_ptr<Derived>(new Derived());
 			this->components.push_back(std::move(result));
-			std::cout << "Subclass of Component has been added." << std::endl;
-			return *result;
+		}
+		
+		template<typename Derived, typename... TArgs> void AddComponent(TArgs&&... args){
+			static_assert(std::is_base_of<Component, Derived>::value, "Derived class is not subclass of Component.");
+			auto result = std::unique_ptr<Derived>(new Derived(args...));
+			this->components.push_back(std::move(result));
 		}
 	};
 };
