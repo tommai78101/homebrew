@@ -35,10 +35,10 @@ namespace Entity {
 
 	void PhysicsComponent::Update(){
 		//if (this->py < -5.0f) {
-		if (this->parent->positionY < -5.0f) {
-			this->ay *= -0.5f;
-			this->vy *= -0.5f;
-			if (std::abs(this->ay) < 0.02f){
+		if (this->parent->positionY < 0.0f) {
+			this->ay *= -0.8f;
+			this->vy *= -0.8f;
+			if (std::abs(this->ay) < std::numeric_limits<float>::epsilon()){
 				this->ay = 0.0f;
 			}
 		}

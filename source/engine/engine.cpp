@@ -84,7 +84,7 @@ namespace Engine {
 		//You first declare a component, with your edited values.
 		//Then you add them in via the helper function, AddComponent<T>(), passing in components as arguments.
 		//This can be extended to full class object initializations.
-		for (int i = 0; i < 2; i++){
+		for (int i = 0; i < 5; i++){
 			PhysicsComponent p;
 			//p.py = 5.0f * i;
 			//p.px = i * 3.0f;

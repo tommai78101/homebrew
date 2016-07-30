@@ -6,17 +6,17 @@
 #include <3ds.h>
 #include <citro3d.h>
 
-#include <iostream>
 #include <cstdlib>
+#include <cmath>
+#include <cstring>
+#include <iostream>
 #include <iomanip>
-#include <vector>
+#include <limits>
 #include <memory>
+#include <typeinfo>
 #include <type_traits>
 #include <utility>
-#include <cmath>
-#include <array>
-#include <cstring>
-#include <typeinfo>
+#include <vector>
 
 typedef struct {
 	float positions[3];
