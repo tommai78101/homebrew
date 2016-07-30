@@ -4,51 +4,9 @@
 #	define ENTITY_HEADER
 
 #include "../common.h"
+#include "../engine/component.h"
 
 namespace Entity {
-	enum class ComponentType {
-		AbstractComponent,
-		PhysicsComponent,
-		ScaleComponent
-	};
-	
-	struct Component {
-		ComponentType type;
-		
-		Component();
-		virtual ~Component();
-		virtual void Update() = 0;
-		virtual void RenderUpdate(C3D_Mtx* modelMatrix) = 0;
-		virtual void Out() = 0;
-	};
-
-	class PhysicsComponent : public Component {
-	public:
-		float ax, ay, az, vx, vy, vz, px, py, pz;
-		const float GravityY = -0.4f;
-
-		PhysicsComponent();
-		PhysicsComponent(PhysicsComponent& copy);
-
-		void Update() override;
-		void RenderUpdate(C3D_Mtx* modelMatrix) override;
-		void Out() override;
-	};
-	
-	class ScaleComponent : public Component {
-	public:
-		float scaleX, scaleY, scaleZ;
-		
-		ScaleComponent();
-		ScaleComponent(ScaleComponent& copy);
-		
-		void Update() override;
-		void RenderUpdate(C3D_Mtx* modelMatrix) override;
-		void Out() override;
-	};
-	
-	//--------------------------------------------------------------------------------------
-
 	class GameObject {
 	public:
 		std::vector<std::shared_ptr<Component>> components;
@@ -79,6 +37,7 @@ namespace Entity {
 			return result;
 		}
 		
+		//Returns shared pointer to a subclass of Component if found. Returns nullptr if not.
 		template<typename Derived> std::shared_ptr<Derived> GetComponent() {
 			static_assert(std::is_base_of<Component, Derived>::value, "Derived class is not subclass of Component.");
 			for (size_t i = 0; i < this->components.size(); i++){

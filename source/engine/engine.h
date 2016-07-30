@@ -6,6 +6,7 @@
 #include "../common.h"
 #include "../entity/entity.h"
 #include "../entity/player.h"
+#include "component.h"
 
 //Shader headers
 #include "vshader_shbin.h"
