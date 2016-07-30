@@ -86,17 +86,19 @@ namespace Engine {
 		//This can be extended to full class object initializations.
 		for (int i = 0; i < 2; i++){
 			PhysicsComponent p;
-			p.py = 5.0f * i;
-			p.px = i * 3.0f;
+			//p.py = 5.0f * i;
+			//p.px = i * 3.0f;
 		
 			std::shared_ptr<GameObject> temp(new GameObject(vertexList, vertexListSize));
+			temp->positionY = 5.0f * i;
+			temp->positionX = 3.0f * i;
 			temp->AddComponent<PhysicsComponent>(p);
 			this->gameObjects.push_back(temp);
 			
 			//This code shows how to fetch existing components and modify them.
 			//If the returned value is nullptr, then it means game object is missing that component.
-			std::shared_ptr<PhysicsComponent> s = temp->GetComponent<PhysicsComponent>();
-			s->px *= -20.0f;
+			//std::shared_ptr<PhysicsComponent> s = temp->GetComponent<PhysicsComponent>();
+			//s->px *= -20.0f;
 		}
 		
 		std::shared_ptr<GameObject> floor(new GameObject(vertexList, vertexListSize));
@@ -104,7 +106,7 @@ namespace Engine {
 		scale->scaleY = 0.01f;
 		scale->scaleX = scale->scaleZ = 10.0f;
 		std::shared_ptr<PhysicsComponent> physics = floor->AddComponent<PhysicsComponent>();
-		physics->py = -10.0f;
+		floor->positionY = -10.0f;
 		this->gameObjects.push_back(floor);
 	}
 

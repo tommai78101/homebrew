@@ -15,7 +15,8 @@ namespace Entity {
 
 	PhysicsComponent::PhysicsComponent() {
 		this->type = ComponentType::PhysicsComponent;
-		ax = ay = az = vx = vy = vz = px = py = pz = 0.0f;
+		ax = ay = az = vx = vy = vz = 0.0f;
+		//px = py = pz = 0.0f;
 		std::cout << "PhysicsComponent has been created." << std::endl;
 	}
 	
@@ -27,13 +28,14 @@ namespace Entity {
 		this->vx = copy.vx;
 		this->vy = copy.vy;
 		this->vz = copy.vz;
-		this->px = copy.px;
-		this->py = copy.py;
-		this->pz = copy.pz;
+		//this->px = copy.px;
+		//this->py = copy.py;
+		//this->pz = copy.pz;
 	}
 
 	void PhysicsComponent::Update(){
-		if (this->py < -5.0f) {
+		//if (this->py < -5.0f) {
+		if (this->parent->positionY < -5.0f) {
 			this->ay *= -0.5f;
 			this->vy *= -0.5f;
 			if (std::abs(this->ay) < 0.02f){
@@ -47,9 +49,12 @@ namespace Entity {
 		this->vx += this->ax;
 		this->vy += this->ay;
 		this->vz += this->az;
-		this->px += this->vx;
-		this->py += this->vy;
-		this->pz += this->vz;
+		//this->px += this->vx;
+		//this->py += this->vy;
+		//this->pz += this->vz;
+		this->parent->positionX += this->vx;
+		this->parent->positionY += this->vy;
+		this->parent->positionZ += this->vz;
 
 		this->vx *= 0.2f;
 		this->vy *= 0.2f;
@@ -57,11 +62,13 @@ namespace Entity {
 	}
 
 	void PhysicsComponent::RenderUpdate(C3D_Mtx* modelMatrix){
-		Mtx_Translate(modelMatrix, this->px, this->py, this->pz);
+		//Mtx_Translate(modelMatrix, this->px, this->py, this->pz);
+		Mtx_Translate(modelMatrix, this->parent->positionX, this->parent->positionY, this->parent->positionZ);
 	}
 
 	void PhysicsComponent::Out(){
-		std::cout << std::setprecision(3) << az << "    " << vz << "    " << pz << std::endl;
+		//std::cout << std::setprecision(3) << az << "    " << vz << "    " << pz << std::endl;
+		std::cout << std::setprecision(3) << az << "    " << vz << "     " << this->parent->positionZ << std::endl;
 	}
 
 	//------------------------------------------------------------------------------------

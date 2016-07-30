@@ -20,6 +20,9 @@ namespace Entity {
 		this->renderFlag = true;
 		//Enabling updating flag.
 		this->updateFlag = true;
+		
+		//Remaining class member initialization.
+		this->positionX = this->positionY = this->positionZ = 0.0f;
 
 		//Entity-Component stuffs.
 		this->components.clear();
