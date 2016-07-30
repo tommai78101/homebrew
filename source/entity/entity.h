@@ -7,6 +7,8 @@
 #include "../engine/component.h"
 
 namespace Entity {
+	class Component;
+	
 	class GameObject {
 	public:
 		std::vector<std::shared_ptr<Component>> components;

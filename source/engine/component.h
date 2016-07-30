@@ -4,8 +4,11 @@
 #	define COMPONENT_HEADER
 
 #include "../common.h"
+#include "../entity/entity.h"
 
 namespace Entity {
+	class GameObject;
+	
 	enum class ComponentType {
 		AbstractComponent,
 		PhysicsComponent,
@@ -14,9 +17,13 @@ namespace Entity {
 	
 	struct Component {
 		ComponentType type;
+		std::shared_ptr<GameObject> parent;
 		
 		Component();
 		virtual ~Component();
+		
+		void SetParent(GameObject* parent);
+		
 		virtual void Update() = 0;
 		virtual void RenderUpdate(C3D_Mtx* modelMatrix) = 0;
 		virtual void Out() = 0;

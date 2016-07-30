@@ -6,6 +6,10 @@ namespace Entity {
 	}
 	
 	Component::~Component(){ }
+	
+	void Component::SetParent(GameObject* parent){
+		this->parent = std::shared_ptr<GameObject>(parent);
+	}
 
 	//------------------------------------------------------------------------------------
 
