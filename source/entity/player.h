@@ -13,7 +13,7 @@ namespace Entity {
 		float camX, camZ;
 		float rotationPitch, rotationYaw;
 		float speed;
-		u16 touchX, touchY, oldTouchX, oldTouchY, offsetTouchX, offsetTouchY;
+		s16 touchX, touchY, oldTouchX, oldTouchY, offsetTouchX, offsetTouchY;
 		u16 counter;
 
 		Player();

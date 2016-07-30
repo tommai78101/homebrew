@@ -82,26 +82,24 @@ namespace Entity {
 			//When releasing touch input, the value will default back to 0. Therefore, we need to check on
 			//KEY_TOUCH to detect touchscreen press/hold/release events.
 			if (keyDown & KEY_TOUCH) {
-				this->oldTouchX = touchInput.py;
-				this->oldTouchY = touchInput.px;
+				this->oldTouchX = (s16) touchInput.py;
+				this->oldTouchY = (s16) touchInput.px;
 			}
 			else if (keyHeld & KEY_TOUCH) {
-				this->offsetTouchY = this->oldTouchY - touchInput.px;
-				this->offsetTouchX = this->oldTouchX - touchInput.py;
+				this->offsetTouchY = this->oldTouchY - (s16) touchInput.px;
+				this->offsetTouchX = this->oldTouchX - (s16) touchInput.py;
 
 				//Inverted Pitch (X axis) (multiply it by -1.0f)
 				//There exists this method of calculating overall rotation for rotation X, Y, in 1 line of code:
-				float f = std::fmod(((((float) (this->offsetTouchX + this->touchX) * sensitivity / 65536.0f) * 180.0f) - 90.0f), 360.0f);
-				if (this->inversePitchFlag){
-					this->rotationPitch = -degToRad(f);
-				}
-				else {
-					this->rotationPitch = degToRad(f);
-				}
-				
+				//float f = std::fmod(((((float) (this->offsetTouchX + this->touchX) * sensitivity / 65536.0f) * 180.0f)), 180.0f) - 90.0f;
+				//float f = (std::max<float>(0.1f, std::min<float>((((float) (this->offsetTouchX + this->touchX)) * sensitivity / 65536.0f) * 180.0f, 179.9f))) - 90.0f;
+				float f = (((float) (this->offsetTouchX + this->touchX)) / 65536.0f) * sensitivity * 180.0f;
+				f = std::max<float>(-89.9f, std::min<float>(f, 89.9f));
+				this->rotationPitch = degToRad(f);
 				
 				text(8, 0, "                   ");
 				text(8, 0, "Pitch: " + ToString(f));
+				
 				
 				f = std::fmod(((((float) (this->offsetTouchY + this->touchY) * sensitivity / 65536.0f) * 360.0f) - 180.0f), 360.0f) - 180.0f;
 				this->rotationYaw = degToRad(f);
@@ -117,13 +115,12 @@ namespace Entity {
 				//Applying same rotation, so as to get a smoother transition from Hold to Release button events. (Includes pitch inversion)
 				//This is optional, by the way.
 				//std::fmod = Floating Point Modulus. Fetches the remainder, equivalent to integer modulus.
-				float f = std::fmod(((((float) this->touchX * sensitivity / 65536.0f) * 180.0f) - 90.0f), 360.0f);
-				if (this->inversePitchFlag){
-					this->rotationPitch = -degToRad(f);
-				}
-				else {
-					this->rotationPitch = degToRad(f);
-				}
+				//float f = std::fmod(((((float) this->touchX * sensitivity / 65536.0f) * 180.0f)), 180.0f) - 90.0f;
+				//float f = (std::max<float>(0.1f, std::min<float>((((float) (this->offsetTouchX + this->touchX)) * sensitivity / 65536.0f) * 180.0f, 179.9f))) - 90.0f;
+				float f = (((float) (this->touchX)) / 65536.0f) * sensitivity * 180.0f;
+				f = std::max<float>(-89.9f, std::min<float>(f, 89.9f));
+				this->rotationPitch = degToRad(f);
+				this->touchX = std::max<float>(-127, std::min<float>(this->touchX, 127)); //Magic number. This resets the pitch offset value to the min/max dragging value.
 				
 				text(8, 0, "                   ");
 				text(8, 0, "Pitch: " + ToString(f));
