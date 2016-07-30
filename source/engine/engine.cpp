@@ -103,10 +103,12 @@ namespace Engine {
 		
 		std::shared_ptr<GameObject> floor(new GameObject(vertexList, vertexListSize));
 		std::shared_ptr<ScaleComponent> scale = floor->AddComponent<ScaleComponent>();
-		scale->scaleY = 0.01f;
+		scale->scaleY = 0.1f;
 		scale->scaleX = scale->scaleZ = 10.0f;
 		std::shared_ptr<PhysicsComponent> physics = floor->AddComponent<PhysicsComponent>();
-		floor->positionY = -10.0f;
+		floor->positionY = -20.0f;
+		floor->positionX = 0.0f;
+		floor->positionZ = 0.0f;
 		this->gameObjects.push_back(floor);
 	}
 

@@ -9,6 +9,7 @@
 namespace Entity {
 	class Player {
 	public:
+		bool inversePitchFlag;
 		float camX, camZ;
 		float rotationPitch, rotationYaw;
 		float speed;

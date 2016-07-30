@@ -4,16 +4,18 @@ namespace Entity {
 	Player::Player(){
 		this->camX = 0.0f;
 		this->camZ = 10.0f;		//Points  towards the positive Z axis. This also means default yaw orientation is positive Z.
-		this->rotationPitch = degToRad(0.0f); 
-		this->rotationYaw = degToRad(0.0f);
+		this->rotationPitch = degToRad(-90.0f); 
+		this->rotationYaw = degToRad(1.0f);
 		this->speed = 0.04f;
 		
 		//Other variables
 		this->offsetTouchX = this->offsetTouchY = 0.0f;
-		this->oldTouchX = this->oldTouchY = 0;
-		this->touchX = 0; 
-		this->touchY = 0;
+		this->oldTouchX = BOTTOM_SCREEN_WIDTH / 2;
+		this->oldTouchY = BOTTOM_SCREEN_HEIGHT / 2;
+		this->touchX = this->oldTouchX; 
+		this->touchY = this->oldTouchY;
 		this->counter = 0;
+		this->inversePitchFlag = true;
 	}
 
 	void Player::Update(u32 keyDown, u32 keyHeld, u32 keyUp, touchPosition touchInput){
@@ -87,10 +89,16 @@ namespace Entity {
 				this->offsetTouchY = this->oldTouchY - touchInput.px;
 				this->offsetTouchX = this->oldTouchX - touchInput.py;
 
-				//Inverted Pitch (X axis) 
+				//Inverted Pitch (X axis) (multiply it by -1.0f)
 				//There exists this method of calculating overall rotation for rotation X, Y, in 1 line of code:
 				float f = std::fmod(((((float) (this->offsetTouchX + this->touchX) * sensitivity / 65536.0f) * 180.0f) - 90.0f), 360.0f);
-				this->rotationPitch = -degToRad(f);
+				if (this->inversePitchFlag){
+					this->rotationPitch = -degToRad(f);
+				}
+				else {
+					this->rotationPitch = degToRad(f);
+				}
+				
 				
 				text(8, 0, "                   ");
 				text(8, 0, "Pitch: " + ToString(f));
@@ -106,11 +114,16 @@ namespace Entity {
 				this->touchX += this->offsetTouchX;
 				this->touchY += this->offsetTouchY;
 
-				//Applying same rotation, so as to get a smoother transition from Hold to Release button events.
+				//Applying same rotation, so as to get a smoother transition from Hold to Release button events. (Includes pitch inversion)
 				//This is optional, by the way.
 				//std::fmod = Floating Point Modulus. Fetches the remainder, equivalent to integer modulus.
 				float f = std::fmod(((((float) this->touchX * sensitivity / 65536.0f) * 180.0f) - 90.0f), 360.0f);
-				this->rotationPitch = -degToRad(f);
+				if (this->inversePitchFlag){
+					this->rotationPitch = -degToRad(f);
+				}
+				else {
+					this->rotationPitch = degToRad(f);
+				}
 				
 				text(8, 0, "                   ");
 				text(8, 0, "Pitch: " + ToString(f));
@@ -131,11 +144,18 @@ namespace Entity {
 			this->speed = 0.05f;
 		}
 		
+		//Inverse Pitch
+		if (keyDown & KEY_X){
+			this->inversePitchFlag = !this->inversePitchFlag;
+		}
+		
 		if (this->counter > 50){
 			text(10, 0, "                                     ");
 			text(11, 0, "                                     ");
+			text(12, 0, "                                     ");
 			text(10, 0, "Touch Coordinates: " + ToString(this->touchX) + "  " + ToString(this->touchY));
-			text(11, 0, "Yaw: " + ToString(this->rotationYaw) + "   Pitch: " + ToString(this->rotationPitch));
+			text(11, 0, "Old Touches: " + ToString(this->oldTouchX) + "  " + ToString(this->oldTouchY));
+			text(12, 0, "Yaw: " + ToString(this->rotationYaw) + "   Pitch: " + ToString(this->rotationPitch));
 			this->counter = 0;
 		}
 		else {
@@ -145,7 +165,7 @@ namespace Entity {
 
 	void Player::RenderUpdate(C3D_Mtx* viewMatrix){
 		Mtx_Identity(viewMatrix);
-		Mtx_RotateX(viewMatrix, this->rotationPitch, true);
+		Mtx_RotateX(viewMatrix, this->rotationPitch, true);			
 		Mtx_RotateY(viewMatrix, this->rotationYaw, true);
 		Mtx_Translate(viewMatrix, -this->camX, 0.0f, -this->camZ);
 	}
