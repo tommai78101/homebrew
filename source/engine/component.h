@@ -32,7 +32,6 @@ namespace Entity {
 	class PhysicsComponent : public Component {
 	public:
 		float ax, ay, az, vx, vy, vz;
-		//float px, py, pz;
 		const float GravityY = -0.4f;
 
 		PhysicsComponent();

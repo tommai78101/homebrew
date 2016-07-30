@@ -1,9 +1,6 @@
 #include "entity.h"
 
 namespace Entity {
-
-	//------------------------------------------------------------------------------------
-
 	GameObject::GameObject(const Vertex list[], int size){
 		//Setting array element size.
 		this->listElementSize = size;

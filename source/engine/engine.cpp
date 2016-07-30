@@ -90,7 +90,7 @@ namespace Engine {
 			//p.px = i * 3.0f;
 		
 			std::shared_ptr<GameObject> temp(new GameObject(vertexList, vertexListSize));
-			temp->positionY = 5.0f * i;
+			temp->positionY = 5.0f * (i+1);
 			temp->positionX = 3.0f * i;
 			temp->AddComponent<PhysicsComponent>(p);
 			this->gameObjects.push_back(temp);
@@ -106,9 +106,9 @@ namespace Engine {
 		scale->scaleY = 0.1f;
 		scale->scaleX = scale->scaleZ = 10.0f;
 		std::shared_ptr<PhysicsComponent> physics = floor->AddComponent<PhysicsComponent>();
-		floor->positionY = -20.0f;
+		floor->positionY = -4.0f;
 		floor->positionX = 0.0f;
-		floor->positionZ = 0.0f;
+		floor->positionZ = 1.0f;
 		this->gameObjects.push_back(floor);
 	}
 

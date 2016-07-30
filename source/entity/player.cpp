@@ -15,7 +15,7 @@ namespace Entity {
 		this->touchX = this->oldTouchX; 
 		this->touchY = this->oldTouchY;
 		this->counter = 0;
-		this->inversePitchFlag = true;
+		this->inversePitchFlag = false;
 	}
 
 	void Player::Update(u32 keyDown, u32 keyHeld, u32 keyUp, touchPosition touchInput){
@@ -25,26 +25,38 @@ namespace Entity {
 		if (keyHeld & KEY_L) {
 			if (keyHeld & KEY_LEFT) {
 				this->rotationYaw -= radian;
-				if (this->rotationYaw < degToRad(-180.0f)) {
-					this->rotationYaw = degToRad(180.0f);
-				}
+				this->rotationYaw = std::fmod(this->rotationYaw, degToRad(360.0f));
 			}
 			else if (keyHeld & KEY_RIGHT) {
 				this->rotationYaw += radian;
-				if (this->rotationYaw > degToRad(180.0f)) {
-					this->rotationYaw = degToRad(-180.0f);
-				}
+				this->rotationYaw = std::fmod(this->rotationYaw, degToRad(360.0f));
 			}
 			else if (keyHeld & KEY_UP) {
-				this->rotationPitch += radian;
-				if (this->rotationPitch > degToRad(89.9f)) {
-					this->rotationPitch = degToRad(89.9f);
+				if (this->inversePitchFlag){
+					this->rotationPitch += radian;
+					if (this->rotationPitch > degToRad(89.9f)) {
+						this->rotationPitch = degToRad(89.9f);
+					}
+				}
+				else {
+					this->rotationPitch -= radian;
+					if (this->rotationPitch < degToRad(-89.9f)) {
+						this->rotationPitch = degToRad(-89.9f);
+					}
 				}
 			}
 			else if (keyHeld & KEY_DOWN) {
-				this->rotationPitch -= radian;
-				if (this->rotationPitch < degToRad(-89.9f)) {
-					this->rotationPitch = degToRad(-89.9f);
+				if (this->inversePitchFlag){
+					this->rotationPitch -= radian;
+					if (this->rotationPitch < degToRad(-89.9f)) {
+						this->rotationPitch = degToRad(-89.9f);
+					}
+				}
+				else {
+					this->rotationPitch += radian;
+					if (this->rotationPitch > degToRad(89.9f)) {
+						this->rotationPitch = degToRad(89.9f);
+					}
 				}
 			}
 		}
@@ -144,6 +156,12 @@ namespace Entity {
 		//Inverse Pitch
 		if (keyDown & KEY_X){
 			this->inversePitchFlag = !this->inversePitchFlag;
+			if (this->inversePitchFlag){
+				text(20, 0, "Inverse Pitch is enabled.");
+			}
+			else {
+				text(20, 0, "                              ");
+			}
 		}
 		
 		if (this->counter > 50){
