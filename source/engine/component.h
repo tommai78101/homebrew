@@ -12,7 +12,7 @@ namespace Entity {
 	enum class ComponentType {
 		AbstractComponent,
 		PhysicsComponent,
-		ScaleComponent
+		TransformComponent
 	};
 	
 	struct Component {
@@ -25,7 +25,7 @@ namespace Entity {
 		void SetParent(GameObject* parent);
 		
 		virtual void Update() = 0;
-		virtual void RenderUpdate(C3D_Mtx* modelMatrix) = 0;
+		virtual void RenderUpdate(C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix) = 0;
 		virtual void Out() = 0;
 	};
 
@@ -38,19 +38,20 @@ namespace Entity {
 		PhysicsComponent(PhysicsComponent& copy);
 
 		void Update() override;
-		void RenderUpdate(C3D_Mtx* modelMatrix) override;
+		void RenderUpdate(C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix) override;
 		void Out() override;
 	};
 	
-	class ScaleComponent : public Component {
+	class TransformComponent : public Component {
 	public:
 		float scaleX, scaleY, scaleZ;
+		float rotationPitch, rotationYaw, rotationRoll;
 		
-		ScaleComponent();
-		ScaleComponent(ScaleComponent& copy);
+		TransformComponent();
+		TransformComponent(TransformComponent& copy);
 		
 		void Update() override;
-		void RenderUpdate(C3D_Mtx* modelMatrix) override;
+		void RenderUpdate(C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix) override;
 		void Out() override;
 	};
 };

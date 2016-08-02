@@ -23,7 +23,7 @@ namespace Entity {
 		virtual void Update();
 		virtual void Render();
 		void Release();
-		void RenderUpdate(C3D_Mtx* modelMatrix);
+		void RenderUpdate(C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix);
 		void ConfigureBuffer();
 
 		template<typename Derived> std::shared_ptr<Derived> AddComponent(){

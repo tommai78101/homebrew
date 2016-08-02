@@ -16,6 +16,8 @@ namespace Entity {
 		this->touchY = this->oldTouchY;
 		this->counter = 0;
 		this->inversePitchFlag = false;
+		this->cameraManipulateFlag = false;
+		Mtx_Zeros(&this->oldViewMatrix);
 	}
 
 	void Player::Update(u32 keyDown, u32 keyHeld, u32 keyUp, touchPosition touchInput){
@@ -164,6 +166,15 @@ namespace Entity {
 			}
 		}
 		
+		//Pick up items (Trigger Camera Manipulation)
+		if ((keyDown & KEY_Y) || (keyHeld & KEY_Y)){
+			this->cameraManipulateFlag = true;
+		}
+		else {
+			this->cameraManipulateFlag = false;
+		}
+		
+		this->counter++;
 		if (this->counter > 50){
 			text(10, 0, "                                     ");
 			text(11, 0, "                                     ");
@@ -173,9 +184,6 @@ namespace Entity {
 			text(12, 0, "Yaw: " + ToString(this->rotationYaw) + "   Pitch: " + ToString(this->rotationPitch));
 			this->counter = 0;
 		}
-		else {
-			this->counter++;
-		}
 	}
 
 	void Player::RenderUpdate(C3D_Mtx* viewMatrix){
@@ -183,5 +191,23 @@ namespace Entity {
 		Mtx_RotateX(viewMatrix, this->rotationPitch, true);			
 		Mtx_RotateY(viewMatrix, this->rotationYaw, true);
 		Mtx_Translate(viewMatrix, -this->camX, 0.0f, -this->camZ);
+	}
+	
+	void Player::Manipulate(std::shared_ptr<GameObject> obj, C3D_Mtx& currentViewMatrix, C3D_Mtx& modelMatrix){
+		if (this->cameraManipulateFlag){
+			//Matrix and C3D_Mtx.
+			//C3D_Mtx requires all rows to be [WZYX], instead of the other way around (XYZW).
+			//This is due to how the GPU reads the matrix data.
+			
+			C3D_Mtx inverse, result;
+			Mtx_Copy(&inverse, &currentViewMatrix);
+			Mtx_Inverse(&inverse);
+			
+			Mtx_Multiply(&result, &modelMatrix, &this->oldViewMatrix);
+			Mtx_Multiply(&modelMatrix, &result, &inverse);
+		}
+		else {
+			Mtx_Copy(&this->oldViewMatrix, &currentViewMatrix);
+		}
 	}
 };

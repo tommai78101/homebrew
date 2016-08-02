@@ -50,10 +50,10 @@ namespace Entity {
 		}
 	}
 
-	void GameObject::RenderUpdate(C3D_Mtx* modelMatrix){
+	void GameObject::RenderUpdate(C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix){
 		//This update function will update entity properties.
 		for (size_t i = 0; i < this->components.size(); i++) {
-			this->components[i]->RenderUpdate(modelMatrix);
+			this->components[i]->RenderUpdate(viewMatrix, modelMatrix);
 		}
 	}
 

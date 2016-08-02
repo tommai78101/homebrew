@@ -53,7 +53,7 @@ namespace Entity {
 		this->vz *= 0.2f;
 	}
 
-	void PhysicsComponent::RenderUpdate(C3D_Mtx* modelMatrix){
+	void PhysicsComponent::RenderUpdate(C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix){
 		Mtx_Translate(modelMatrix, this->parent->positionX, this->parent->positionY, this->parent->positionZ);
 	}
 
@@ -63,23 +63,30 @@ namespace Entity {
 
 	//------------------------------------------------------------------------------------
 	
-	ScaleComponent::ScaleComponent() {
-		this->type = ComponentType::ScaleComponent;
+	TransformComponent::TransformComponent() {
+		this->type = ComponentType::TransformComponent;
 		this->scaleX = this->scaleY = this->scaleZ = 1.0f;
+		this->rotationPitch = this->rotationYaw = this->rotationRoll = 0.0f;
 	}
 	
-	ScaleComponent::ScaleComponent(ScaleComponent& copy){
+	TransformComponent::TransformComponent(TransformComponent& copy){
 		this->type = copy.type;
 		this->scaleX = copy.scaleX;
 		this->scaleY = copy.scaleY;
 		this->scaleZ = copy.scaleZ;
+		this->rotationPitch = copy.rotationPitch;
+		this->rotationRoll = copy.rotationRoll;
+		this->rotationYaw = copy.rotationYaw;
 	}
 	
-	void ScaleComponent::Update(){ }
+	void TransformComponent::Update(){ }
 	
-	void ScaleComponent::RenderUpdate(C3D_Mtx* modelMatrix){
-		Mtx_Scale(modelMatrix, this->scaleX, this->scaleY, this->scaleZ);
+	void TransformComponent::RenderUpdate(C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix){
+		Mtx_RotateX(modelMatrix, this->rotationPitch, true);
+		Mtx_RotateY(modelMatrix, this->rotationYaw, true);
+		Mtx_RotateZ(modelMatrix, this->rotationRoll, true);
+		//Mtx_Scale(modelMatrix, this->scaleX, this->scaleY, this->scaleZ);
 	}
 	
-	void ScaleComponent::Out() { }
+	void TransformComponent::Out() { }
 }
