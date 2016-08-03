@@ -198,6 +198,7 @@ namespace Entity {
 			//Matrix and C3D_Mtx.
 			//C3D_Mtx requires all rows to be [WZYX], instead of the other way around (XYZW).
 			//This is due to how the GPU reads the matrix data.
+			//Everything else mathematically is the same.
 			
 			C3D_Mtx inverse, result;
 			Mtx_Copy(&inverse, &currentViewMatrix);

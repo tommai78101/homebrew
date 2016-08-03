@@ -16,7 +16,7 @@ namespace Engine {
 
 		//Initializing Citro3D graphics.
 		C3D_Init(C3D_DEFAULT_CMDBUF_SIZE);
-
+		
 		//Initializing render targets.
 		this->leftTarget = C3D_RenderTargetCreate(240, 400, GPU_RB_RGBA8, GPU_RB_DEPTH24_STENCIL8);
 		this->rightTarget = C3D_RenderTargetCreate(240, 400, GPU_RB_RGBA8, GPU_RB_DEPTH24_STENCIL8);
