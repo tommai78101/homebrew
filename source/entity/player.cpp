@@ -190,7 +190,7 @@ namespace Entity {
 		Mtx_Identity(viewMatrix);
 		Mtx_RotateX(viewMatrix, this->rotationPitch, true);			
 		Mtx_RotateY(viewMatrix, this->rotationYaw, true);
-		Mtx_Translate(viewMatrix, -this->camX, 0.0f, -this->camZ);
+		Mtx_Translate(viewMatrix, -this->camX, 0.0f, -this->camZ, true);
 	}
 	
 	void Player::Manipulate(std::shared_ptr<GameObject> obj, C3D_Mtx& currentViewMatrix, C3D_Mtx& modelMatrix){

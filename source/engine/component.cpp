@@ -54,7 +54,7 @@ namespace Entity {
 	}
 
 	void PhysicsComponent::RenderUpdate(C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix){
-		Mtx_Translate(modelMatrix, this->parent->positionX, this->parent->positionY, this->parent->positionZ);
+		Mtx_Translate(modelMatrix, this->parent->positionX, this->parent->positionY, this->parent->positionZ, true);
 	}
 
 	void PhysicsComponent::Out(){
