@@ -13,7 +13,10 @@ namespace Entity {
 	public:
 		bool renderFlag, updateFlag;
 		void* vertexBuffer;
-		float positionX, positionY, positionZ;
+		C3D_FVec position;
+		C3D_FVec scale;
+		//float positionX, positionY, positionZ;
+		C3D_FQuat rotation;
 		u32 vertexListSize, listElementSize;
 		std::vector<std::shared_ptr<Component>> components;
 		
@@ -28,16 +31,18 @@ namespace Entity {
 
 		template<typename Derived> std::shared_ptr<Derived> AddComponent(){
 			static_assert(std::is_base_of<Component, Derived>::value, "Derived class is not subclass of Component.");
-			std::shared_ptr<Derived> result = std::shared_ptr<Derived>(new Derived());
+			std::shared_ptr<Derived> result(new Derived());
 			result->SetParent(this);
+			result->Initialize();
 			this->components.push_back(result);
 			return result;
 		}
 		
 		template<typename Derived, typename... TArgs> std::shared_ptr<Derived> AddComponent(TArgs&&... args){
 			static_assert(std::is_base_of<Component, Derived>::value, "Derived class is not subclass of Component.");
-			auto result = std::shared_ptr<Derived>(new Derived(args...));
+			std::shared_ptr<Derived> result(new Derived(args...));
 			result->SetParent(this);
+			result->Initialize();
 			this->components.push_back(result);
 			return result;
 		}

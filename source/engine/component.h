@@ -24,6 +24,7 @@ namespace Entity {
 		
 		void SetParent(GameObject* parent);
 		
+		virtual void Initialize() = 0;
 		virtual void Update() = 0;
 		virtual void RenderUpdate(C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix) = 0;
 		virtual void Out() = 0;
@@ -37,6 +38,7 @@ namespace Entity {
 		PhysicsComponent();
 		PhysicsComponent(PhysicsComponent& copy);
 
+		void Initialize() override;
 		void Update() override;
 		void RenderUpdate(C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix) override;
 		void Out() override;
@@ -44,12 +46,16 @@ namespace Entity {
 	
 	class TransformComponent : public Component {
 	public:
-		float scaleX, scaleY, scaleZ;
-		float rotationPitch, rotationYaw, rotationRoll;
+		C3D_FVec scale;
+		C3D_FVec position;
+		C3D_FQuat rotation;
+		float testAngle;
+		//float rotationPitch, rotationYaw, rotationRoll;
 		
 		TransformComponent();
 		TransformComponent(TransformComponent& copy);
 		
+		void Initialize() override;
 		void Update() override;
 		void RenderUpdate(C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix) override;
 		void Out() override;

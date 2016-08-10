@@ -19,7 +19,9 @@ namespace Entity {
 		this->updateFlag = true;
 		
 		//Remaining class member initialization.
-		this->positionX = this->positionY = this->positionZ = 0.0f;
+		this->position.x = this->position.y = this->position.z = 0.0f;
+		this->scale.x = this->scale.y = this->scale.z = 0.0f;
+		this->rotation = Quat_Identity();
 
 		//Entity-Component stuffs.
 		this->components.clear();
@@ -51,6 +53,9 @@ namespace Entity {
 	}
 
 	void GameObject::RenderUpdate(C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix){
+		//Convert quaternion to model matrix;
+		Mtx_FromQuat(modelMatrix, this->rotation);
+		
 		//This update function will update entity properties.
 		for (size_t i = 0; i < this->components.size(); i++) {
 			this->components[i]->RenderUpdate(viewMatrix, modelMatrix);
