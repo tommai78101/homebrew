@@ -25,7 +25,7 @@ namespace Entity {
 		Player();
 		void Update(u32 downKey, u32 heldKey, u32 upKey, touchPosition touchInput);
 		void RenderUpdate(C3D_Mtx* viewMatrix);
-		void Manipulate(std::shared_ptr<GameObject> obj, C3D_Mtx& currentViewMatrix, C3D_Mtx& modelMatrix);
+		void Manipulate(std::shared_ptr<GameObject> obj, C3D_Mtx& currentProjectionMatrix, C3D_Mtx& currentViewMatrix, C3D_Mtx& modelMatrix);
 	};
 };
 

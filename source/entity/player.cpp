@@ -193,22 +193,50 @@ namespace Entity {
 		Mtx_Translate(viewMatrix, -this->camX, 0.0f, -this->camZ, true);
 	}
 	
-	void Player::Manipulate(std::shared_ptr<GameObject> obj, C3D_Mtx& currentViewMatrix, C3D_Mtx& modelMatrix){
+	void Player::Manipulate(std::shared_ptr<GameObject> obj, C3D_Mtx& currentProjectionMatrix, C3D_Mtx& currentViewMatrix, C3D_Mtx& modelMatrix){
 		if (this->cameraManipulateFlag){
 			//Matrix and C3D_Mtx.
 			//C3D_Mtx requires all rows to be [WZYX], instead of the other way around (XYZW).
 			//This is due to how the GPU reads the matrix data.
 			//Everything else mathematically is the same.
 			
-			C3D_Mtx inverse, result;
+			//Rotation - Obtaining the inverse matrix.
+			//C3D_Mtx inverse, result;
+			//Mtx_Copy(&inverse, &currentViewMatrix);
+			//Mtx_Inverse(&inverse);
+			
+			//Rotation - Multiplying the inverse with other matrices to get the actual rotation.
+			//Mtx_Multiply(&result, &modelMatrix, &this->oldViewMatrix);
+			//Mtx_Multiply(&modelMatrix, &result, &inverse);
+			
+			
+			//Gamedev.net
+			C3D_Mtx inverse;
 			Mtx_Copy(&inverse, &currentViewMatrix);
 			Mtx_Inverse(&inverse);
 			
-			Mtx_Multiply(&result, &modelMatrix, &this->oldViewMatrix);
-			Mtx_Multiply(&modelMatrix, &result, &inverse);
+			Mtx_Identity(&modelMatrix);
+			C3D_FVec aheadPosition = FVec4_New(0.0f, 0.0f, -2.0f, 1.0f);
+			aheadPosition = Mtx_MultiplyFVec4(&inverse, aheadPosition);
+			Mtx_Translate(&modelMatrix, aheadPosition.x, aheadPosition.y, aheadPosition.z, true);
+			
+			text(19, 0, " ");
+			std::cout << std::fixed << std::setprecision(2) << "Ahead : " << aheadPosition.x << "    " << aheadPosition.y << "    " << aheadPosition.z << "  " << aheadPosition.w << std::endl;
+			std::cout << std::fixed << std::setprecision(2) << "Player: " << this->camX << "  0.0  " << this->camZ << std::endl;
+
+//			C3D_FVec aheadPosition;
+//			aheadPosition = LookAt(FVec3_New(obj->position.x, obj->position.y, obj->position.z), FVec3_New(inverse.r[0].w, inverse.r[1].w, inverse.r[2].w));
+//			Mtx_FromQuat(&modelMatrix, aheadPosition);
+			
+			//Setting the object's world coordinates.
+			//Mtx_Identity(&modelMatrix);
+			
 		}
 		else {
 			Mtx_Copy(&this->oldViewMatrix, &currentViewMatrix);
-		}
+			text(23, 0, " ");
+			std::cout << std::fixed << std::setprecision(2) << "Current: " << obj->position.x << "    " << obj->position.y << "    " << obj->position.z << std::endl;
+			std::cout << std::fixed << std::setprecision(2) << "Player : " << this->camX << "  0.0  " << this->camZ << std::endl;
+		}                                       
 	}
 };

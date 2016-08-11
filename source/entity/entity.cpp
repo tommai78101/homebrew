@@ -54,12 +54,12 @@ namespace Entity {
 
 	void GameObject::RenderUpdate(C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix){
 		//Convert quaternion to model matrix;
-		Mtx_FromQuat(modelMatrix, this->rotation);
+		//Mtx_FromQuat(modelMatrix, this->rotation);
 		
 		//This update function will update entity properties.
-		for (size_t i = 0; i < this->components.size(); i++) {
-			this->components[i]->RenderUpdate(viewMatrix, modelMatrix);
-		}
+		//for (size_t i = 0; i < this->components.size(); i++) {
+		//	this->components[i]->RenderUpdate(viewMatrix, modelMatrix);
+		//}
 	}
 
 	void GameObject::ConfigureBuffer(){
