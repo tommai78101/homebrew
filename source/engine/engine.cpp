@@ -154,37 +154,43 @@ namespace Engine {
 	void Core::SceneRender(float interOcularDistance){
 		//Declaring reusable model matrix.
 		C3D_Mtx modelMatrix;
-
+	
 		//Compute projection matrix and update matrix to shader program.                                                                                                               
 		Mtx_PerspStereoTilt(&this->projectionMatrix, 40.0f * (std::acos(-1) / 180.0f), 400.0f / 240.0f, 0.01f, 1000.0f, interOcularDistance, 2.0f, false);
 		C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_projection, &this->projectionMatrix);
-
+	
 		//Do something about view matrix.
 		this->player.RenderUpdate(&this->viewMatrix);
-
+	
 		//Compute view matrix and update matrix to shader program.
 		C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_view, &this->viewMatrix);
-
+	
 		//Draw the vertex buffer objects.                     
 		for (size_t i = 0; i < this->gameObjects.size(); i++) {
 			//Switch buffers
 			this->gameObjects[i]->ConfigureBuffer();
-
+	
 			//Calculate model view matrix.
 			Mtx_Identity(&modelMatrix);
 			
 			if (this->player.cameraManipulateFlag){
+				
+				this->gameObjects[i]->position.w = 1.0f;
+				C3D_FQuat rotation = Quat_LookAt(this->gameObjects[i]->position, FVec4_New(this->player.camX, 0.0f, this->player.camZ, 1.0f));
+				//rotation = FVec4_Add(rotation, Quat_CrossFVec3(rotation, FVec3_New(1.0f, 0.0f, 0.0f)));
+				Mtx_FromQuat(&modelMatrix, rotation);
+				
 				C3D_Mtx inverse;
 				Mtx_Copy(&inverse, &this->viewMatrix);                                           
-				Mtx_Inverse(&inverse);                                                            
+				Mtx_Inverse(&inverse);                
 				
 				//Doing the simplified calculations.
 				C3D_FVec aheadPosition = FVec4_New(0.0f, 0.0f, -3.0f, 1.0f);
-				aheadPosition = Mtx_MultiplyFVec4(&inverse, aheadPosition);
 				Mtx_Translate(&modelMatrix, aheadPosition.x, aheadPosition.y, aheadPosition.z, true);
+				Mtx_Multiply(&modelMatrix, &inverse, &modelMatrix);
 				
 				text(18, 0, "Player picking up object.     ");
-				std::cout << "Ahead : " << std::fixed << std::setprecision(1) << aheadPosition.x << "  " << aheadPosition.y << "  " << aheadPosition.z << "  " << aheadPosition.w << std::endl;
+				//std::cout << "Ahead : " << std::fixed << std::setprecision(1) << aheadPosition.x << "  " << aheadPosition.y << "  " << aheadPosition.z << "  " << aheadPosition.w << std::endl;
 				std::cout << "Player: " << std::fixed << std::setprecision(1) << this->player.camX << "  0.0  " << this->player.camZ << std::endl;
 				std::cout << "Model Matrix: " << std::endl;
 				for (int i = 0; i < 16; i++){
@@ -221,10 +227,10 @@ namespace Engine {
 			//this->player.Manipulate(this->gameObjects[i], this->projectionMatrix, this->viewMatrix, modelMatrix);
 			//Compute view matrix and update matrix to shader program.
 			//C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_view, &this->viewMatrix);
-
+	
 			//Update to shader program.
 			C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_model, &modelMatrix);
-
+	
 			//Render entity.
 			this->gameObjects[i]->Render();
 		}
