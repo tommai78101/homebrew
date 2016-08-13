@@ -52,9 +52,9 @@ namespace Engine {
 		AttrInfo_AddLoader(attributeInfo, 1, GPU_FLOAT, 2); //Second float array = texture coordinates.
 		AttrInfo_AddLoader(attributeInfo, 2, GPU_FLOAT, 3); //Third float array = normals.
 
-															// Configure the first fragment shading substage to blend the fragment primary color
-															// with the fragment secondary color.
-															// See https://www.opengl.org/sdk/docs/man2/xhtml/glTexEnv.xml for more insight
+		// Configure the first fragment shading substage to blend the fragment primary color
+		// with the fragment secondary color.
+		// See https://www.opengl.org/sdk/docs/man2/xhtml/glTexEnv.xml for more insight
 		C3D_TexEnv* environment = C3D_GetTexEnv(0);
 		C3D_TexEnvSrc(environment, C3D_Both, GPU_FRAGMENT_PRIMARY_COLOR, GPU_FRAGMENT_SECONDARY_COLOR, 0);
 		C3D_TexEnvOp(environment, C3D_Both, 0, 0, 0);
@@ -87,34 +87,18 @@ namespace Engine {
 		for (int i = 0; i < 1; i++){
 			std::shared_ptr<GameObject> temp(new GameObject(vertexList, vertexListSize));
 			
+			//Physics Component initial setup.
 			PhysicsComponent p;
 			temp->AddComponent<PhysicsComponent>(p);
 			
-			//temp->position.y = 5.0f * (i+1);
-			//temp->position.x = 3.0f * i;
-			
+			//Transform Component initial setup.
 			TransformComponent t;
 			t.position.x = 3.0f * i;
 			t.position.y = 5.0f * (i+1);
 			temp->AddComponent<TransformComponent>(t);
 			
 			this->gameObjects.push_back(temp);
-			
-			//This code shows how to fetch existing components and modify them.
-			//If the returned value is nullptr, then it means game object is missing that component.
-			//std::shared_ptr<PhysicsComponent> s = temp->GetComponent<PhysicsComponent>();
-			//s->px *= -20.0f;
 		}
-		
-//		std::shared_ptr<GameObject> floor(new GameObject(vertexList, vertexListSize));
-//		std::shared_ptr<TransformComponent> scale = floor->AddComponent<TransformComponent>();
-//		scale->scaleY = 0.1f;
-//		scale->scaleX = scale->scaleZ = 10.0f;
-//		std::shared_ptr<PhysicsComponent> physics = floor->AddComponent<PhysicsComponent>();
-//		floor->positionY = -4.0f;
-//		floor->positionX = 0.0f;
-//		floor->positionZ = 1.0f;
-//		this->gameObjects.push_back(floor);
 	}
 
 	void Core::Update(u32 downKey, u32 heldKey, u32 upKey, touchPosition touch){
@@ -173,6 +157,7 @@ namespace Engine {
 			//Calculate model view matrix.
 			Mtx_Identity(&modelMatrix);
 
+			//At the moment, there's only 1 object in the scene. This allows the player to "pick" up the object(s) in hand, and manipulate them.
 			this->gameObjects[i]->RenderUpdate(this->player.cameraManipulateFlag, this->player.cameraPosition, this->viewMatrix, &modelMatrix);
 			
 			//Update to shader program.

@@ -28,6 +28,8 @@ namespace Entity {
 		void Release();
 		void RenderUpdate(bool cameraManipulateFlag, C3D_FVec cameraPosition, C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix);
 		void ConfigureBuffer();
+		
+		//Templates must go inside header files. This is the recommended method in C++.
 
 		template<typename Derived> std::shared_ptr<Derived> AddComponent(){
 			static_assert(std::is_base_of<Component, Derived>::value, "Derived class is not subclass of Component.");

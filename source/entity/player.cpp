@@ -17,8 +17,6 @@ namespace Entity {
 		this->counter = 0;
 		this->inversePitchFlag = false;
 		this->cameraManipulateFlag = false;
-		this->hasMovedFlag = false;
-		Mtx_Zeros(&this->oldViewMatrix);
 	}
 
 	void Player::Update(u32 keyDown, u32 keyHeld, u32 keyUp, touchPosition touchInput){
@@ -177,6 +175,7 @@ namespace Entity {
 		
 		this->counter++;
 		if (this->counter > 50){
+			//This is done to clear up the console output screen.
 			text(10, 0, "                                     ");
 			text(11, 0, "                                     ");
 			text(12, 0, "                                     ");
@@ -192,8 +191,5 @@ namespace Entity {
 		Mtx_RotateX(viewMatrix, this->rotationPitch, true);			
 		Mtx_RotateY(viewMatrix, this->rotationYaw, true);
 		Mtx_Translate(viewMatrix, -this->cameraPosition.x, 0.0f, -this->cameraPosition.z, true);
-	}
-	
-	void Player::Manipulate(std::shared_ptr<GameObject> obj, C3D_Mtx& currentProjectionMatrix, C3D_Mtx& currentViewMatrix){
 	}
 };

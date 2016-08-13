@@ -32,6 +32,8 @@ namespace Entity {
 	void GameObject::Update(){
 		for (size_t i = 0; i < this->components.size(); i++){
 			this->components[i]->Update();
+			
+			//Ignore this for now.
 			//this->components[i]->Out();
 		}
 	}
@@ -53,17 +55,14 @@ namespace Entity {
 	}
 
 	void GameObject::RenderUpdate(bool cameraManipulateFlag, C3D_FVec cameraPosition, C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix){
-		//Convert quaternion to model matrix;
-		//Mtx_FromQuat(modelMatrix, this->rotation);
-		
-		//This update function will update entity properties.
-		//for (size_t i = 0; i < this->components.size(); i++) {
-		//	this->components[i]->RenderUpdate(viewMatrix, modelMatrix);
-		//}
-		
+		//3D object pick-up.
 		if (cameraManipulateFlag){
+			//If true, allow the player to manipualte the object in the world.
+			
+			//Orient the object to face the camera when the object is picked up and held in the hands.
 			this->rotation = Quat_MyLookAt(this->position, cameraPosition);
 			
+			//Creating an inverse matrix.
 			C3D_Mtx inverse;
 			Mtx_Copy(&inverse, &viewMatrix);                                           
 			Mtx_Inverse(&inverse);                
@@ -72,12 +71,16 @@ namespace Entity {
 			Mtx_Translate(modelMatrix, 0.0f, 0.0f, -3.0f, true);
 			Mtx_Multiply(modelMatrix, &inverse, modelMatrix);
 			
+			//Decomposing the model matrix and obtaining the new object positions. See (Matrix Decomposition) for more info.
 			this->position = FVec4_New(modelMatrix->r[0].w, modelMatrix->r[1].w, modelMatrix->r[2].w, 1.0f);
 		}
 		else {
+			//If false, keep its new position and rotation in the world and go from there.
 			Mtx_Translate(modelMatrix, this->position.x, this->position.y, this->position.z, true);
 			C3D_Mtx rotationMatrix;
 			Mtx_FromQuat(&rotationMatrix, this->rotation);
+			
+			//We multiply the model matrix with the rotation matrix, so model matrix will have the new rotation/orientation set.
 			Mtx_Multiply(modelMatrix, modelMatrix, &rotationMatrix);
 		}
 	}

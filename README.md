@@ -10,22 +10,23 @@ This project uses Eclipse C/C++ for homebrew application development, and Citra 
 ### Notes
 
 * [Manual of Picasso Shader Lanuage for PICA200.](https://github.com/fincs/picasso/blob/master/Manual.md)
+* Requires [latest version of Citro3D](https://github.com/fincs/citro3d) 
 
 ### Purpose
 
-Implemented Entity-Component System and separated Player Camera View from Core Engine. Also, learned a lot of C++11 smart pointers usage. Rewrote a ton of code, just to make it work. Caution: Application runs slowly due to constant string output.
+Implement 3D Object Pick Up game mechanic. Gravity is also implemented.
 
 Controls:
 
 * Use touchscreen to look around. 
-* Hold L and use C-Stick to look around.  
 * Use C-Stick to move around.   
-* Hold A to run/move quicker.   
+* Hold A to run/move quicker.
+* Hold B to pick up the cube.   
 * Press Start to quit.
 
 ### Results
 
-![](http://i.imgur.com/K63sUHe.png)
+![](http://imgur.com/v9GhSOS.gif)
 
 ### Building
 

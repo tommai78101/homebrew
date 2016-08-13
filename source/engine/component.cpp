@@ -68,7 +68,6 @@ namespace Entity {
 	TransformComponent::TransformComponent() {
 		this->type = ComponentType::TransformComponent;
 		this->testAngle = 0.0f;
-		//this->rotationPitch = this->rotationYaw = this->rotationRoll = 0.0f;
 	}
 	
 	TransformComponent::TransformComponent(TransformComponent& copy){
@@ -77,9 +76,6 @@ namespace Entity {
 		this->scale.y = copy.scale.y;
 		this->scale.z = copy.scale.z;
 		this->testAngle = copy.testAngle;
-		//this->rotationPitch = copy.rotationPitch;
-		//this->rotationRoll = copy.rotationRoll;
-		//this->rotationYaw = copy.rotationYaw;
 	}
 	
 	void TransformComponent::Initialize() {
@@ -90,20 +86,9 @@ namespace Entity {
 	}
 	
 	void TransformComponent::Update(){ 
-		//this->testAngle = std::fmod(this->testAngle + 0.1f, 360.0f);
-		//Quat_RotateY(this->rotation, this->testAngle, true);
 	}
 	
 	void TransformComponent::RenderUpdate(C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix){
-		//C3D_Mtx rotationMatrix, result;
-		//Mtx_FromQuat(&rotationMatrix, this->parent->rotation);
-		//Mtx_Multiply(&result, modelMatrix, &rotationMatrix);
-		//Mtx_Copy(modelMatrix, &result);
-		
-		//Mtx_RotateX(modelMatrix, this->rotationPitch, true);
-		//Mtx_RotateY(modelMatrix, this->rotationYaw, true);
-		//Mtx_RotateZ(modelMatrix, this->rotationRoll, true);
-		//Mtx_Scale(modelMatrix, this->scaleX, this->scaleY, this->scaleZ);
 	}
 	
 	void TransformComponent::Out() { }
