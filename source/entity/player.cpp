@@ -2,8 +2,8 @@
 
 namespace Entity {
 	Player::Player(){
-		this->camX = 0.0f;
-		this->camZ = 10.0f;		//Points  towards the positive Z axis. This also means default yaw orientation is positive Z.
+		this->cameraPosition.x = 0.0f;
+		this->cameraPosition.z = 10.0f;		//Points  towards the positive Z axis. This also means default yaw orientation is positive Z.
 		this->rotationPitch = degToRad(0.0f); 
 		this->rotationYaw = degToRad(0.0f);
 		this->speed = 0.04f;
@@ -17,6 +17,7 @@ namespace Entity {
 		this->counter = 0;
 		this->inversePitchFlag = false;
 		this->cameraManipulateFlag = false;
+		this->hasMovedFlag = false;
 		Mtx_Zeros(&this->oldViewMatrix);
 	}
 
@@ -69,20 +70,20 @@ namespace Entity {
 			//Note strafing reverses the ordering of cosine and sine calculations, because
 			//The cosine and sine calculations are rotated by 90 degrees counterclockwise.
 			if (keyHeld & KEY_UP) {
-				this->camX += std::sin(this->rotationYaw) * this->speed;
-				this->camZ -= std::cos(this->rotationYaw) * this->speed;
+				this->cameraPosition.x += std::sin(this->rotationYaw) * this->speed;
+				this->cameraPosition.z -= std::cos(this->rotationYaw) * this->speed;
 			}
 			else if (keyHeld & KEY_DOWN) {
-				this->camX -= std::sin(this->rotationYaw) * this->speed;
-				this->camZ += std::cos(this->rotationYaw) * this->speed;
+				this->cameraPosition.x -= std::sin(this->rotationYaw) * this->speed;
+				this->cameraPosition.z += std::cos(this->rotationYaw) * this->speed;
 			}
 			else if (keyHeld & KEY_LEFT) {
-				this->camX -= std::cos(this->rotationYaw) * this->speed;
-				this->camZ -= std::sin(this->rotationYaw) * this->speed;
+				this->cameraPosition.x -= std::cos(this->rotationYaw) * this->speed;
+				this->cameraPosition.z -= std::sin(this->rotationYaw) * this->speed;
 			}
 			else if (keyHeld & KEY_RIGHT) {
-				this->camX += std::cos(this->rotationYaw) * this->speed;
-				this->camZ += std::sin(this->rotationYaw) * this->speed;
+				this->cameraPosition.x += std::cos(this->rotationYaw) * this->speed;
+				this->cameraPosition.z += std::sin(this->rotationYaw) * this->speed;
 			}
 
 			//Touchscreen cursor sensitivity. May need tweaking.
@@ -190,53 +191,9 @@ namespace Entity {
 		Mtx_Identity(viewMatrix);
 		Mtx_RotateX(viewMatrix, this->rotationPitch, true);			
 		Mtx_RotateY(viewMatrix, this->rotationYaw, true);
-		Mtx_Translate(viewMatrix, -this->camX, 0.0f, -this->camZ, true);
+		Mtx_Translate(viewMatrix, -this->cameraPosition.x, 0.0f, -this->cameraPosition.z, true);
 	}
 	
-	void Player::Manipulate(std::shared_ptr<GameObject> obj, C3D_Mtx& currentProjectionMatrix, C3D_Mtx& currentViewMatrix, C3D_Mtx& modelMatrix){
-		if (this->cameraManipulateFlag){
-			//Matrix and C3D_Mtx.
-			//C3D_Mtx requires all rows to be [WZYX], instead of the other way around (XYZW).
-			//This is due to how the GPU reads the matrix data.
-			//Everything else mathematically is the same.
-			
-			//Rotation - Obtaining the inverse matrix.
-			//C3D_Mtx inverse, result;
-			//Mtx_Copy(&inverse, &currentViewMatrix);
-			//Mtx_Inverse(&inverse);
-			
-			//Rotation - Multiplying the inverse with other matrices to get the actual rotation.
-			//Mtx_Multiply(&result, &modelMatrix, &this->oldViewMatrix);
-			//Mtx_Multiply(&modelMatrix, &result, &inverse);
-			
-			
-			//Gamedev.net
-			C3D_Mtx inverse;
-			Mtx_Copy(&inverse, &currentViewMatrix);
-			Mtx_Inverse(&inverse);
-			
-			Mtx_Identity(&modelMatrix);
-			C3D_FVec aheadPosition = FVec4_New(0.0f, 0.0f, -2.0f, 1.0f);
-			aheadPosition = Mtx_MultiplyFVec4(&inverse, aheadPosition);
-			Mtx_Translate(&modelMatrix, aheadPosition.x, aheadPosition.y, aheadPosition.z, true);
-			
-			text(19, 0, " ");
-			std::cout << std::fixed << std::setprecision(2) << "Ahead : " << aheadPosition.x << "    " << aheadPosition.y << "    " << aheadPosition.z << "  " << aheadPosition.w << std::endl;
-			std::cout << std::fixed << std::setprecision(2) << "Player: " << this->camX << "  0.0  " << this->camZ << std::endl;
-
-//			C3D_FVec aheadPosition;
-//			aheadPosition = LookAt(FVec3_New(obj->position.x, obj->position.y, obj->position.z), FVec3_New(inverse.r[0].w, inverse.r[1].w, inverse.r[2].w));
-//			Mtx_FromQuat(&modelMatrix, aheadPosition);
-			
-			//Setting the object's world coordinates.
-			//Mtx_Identity(&modelMatrix);
-			
-		}
-		else {
-			Mtx_Copy(&this->oldViewMatrix, &currentViewMatrix);
-			text(23, 0, " ");
-			std::cout << std::fixed << std::setprecision(2) << "Current: " << obj->position.x << "    " << obj->position.y << "    " << obj->position.z << std::endl;
-			std::cout << std::fixed << std::setprecision(2) << "Player : " << this->camX << "  0.0  " << this->camZ << std::endl;
-		}                                       
+	void Player::Manipulate(std::shared_ptr<GameObject> obj, C3D_Mtx& currentProjectionMatrix, C3D_Mtx& currentViewMatrix){
 	}
 };

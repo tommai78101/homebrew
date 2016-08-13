@@ -172,62 +172,9 @@ namespace Engine {
 	
 			//Calculate model view matrix.
 			Mtx_Identity(&modelMatrix);
+
+			this->gameObjects[i]->RenderUpdate(this->player.cameraManipulateFlag, this->player.cameraPosition, this->viewMatrix, &modelMatrix);
 			
-			if (this->player.cameraManipulateFlag){
-				
-				this->gameObjects[i]->position.w = 1.0f;
-				C3D_FQuat rotation = Quat_LookAt(this->gameObjects[i]->position, FVec4_New(this->player.camX, 0.0f, this->player.camZ, 1.0f));
-				//rotation = FVec4_Add(rotation, Quat_CrossFVec3(rotation, FVec3_New(1.0f, 0.0f, 0.0f)));
-				Mtx_FromQuat(&modelMatrix, rotation);
-				
-				C3D_Mtx inverse;
-				Mtx_Copy(&inverse, &this->viewMatrix);                                           
-				Mtx_Inverse(&inverse);                
-				
-				//Doing the simplified calculations.
-				C3D_FVec aheadPosition = FVec4_New(0.0f, 0.0f, -3.0f, 1.0f);
-				Mtx_Translate(&modelMatrix, aheadPosition.x, aheadPosition.y, aheadPosition.z, true);
-				Mtx_Multiply(&modelMatrix, &inverse, &modelMatrix);
-				
-				text(18, 0, "Player picking up object.     ");
-				//std::cout << "Ahead : " << std::fixed << std::setprecision(1) << aheadPosition.x << "  " << aheadPosition.y << "  " << aheadPosition.z << "  " << aheadPosition.w << std::endl;
-				std::cout << "Player: " << std::fixed << std::setprecision(1) << this->player.camX << "  0.0  " << this->player.camZ << std::endl;
-				std::cout << "Model Matrix: " << std::endl;
-				for (int i = 0; i < 16; i++){
-					float a = modelMatrix.m[(i/4) + (3-i%4)];
-					if (a < 0.0f){
-						std::cout << std::fixed << std::setprecision(1) << a << "  ";	
-					}
-					else {
-						std::cout << std::fixed << std::setprecision(1) << a << "   ";
-					}
-					if (i % 4 == 3){
-						std::cout << std::endl;
-					}
-				}
-			}
-			else{
-				text(18, 0, "Player not picking up object.");
-				text(19, 0, "                              ");
-				text(20, 0, "                              ");
-				text(21, 0, "                              ");
-				text(22, 0, "                              ");
-				text(23, 0, "                              ");
-				text(24, 0, "                              ");
-				text(25, 0, "                              ");
-				text(26, 0, "                              ");
-				text(27, 0, "                              ");
-				text(28, 0, "                              ");
-			}
-			
-			
-			//this->gameObjects[i]->RenderUpdate(this->viewMatrix, &modelMatrix);
-			
-			//Triggering camera perspective manipulation.
-			//this->player.Manipulate(this->gameObjects[i], this->projectionMatrix, this->viewMatrix, modelMatrix);
-			//Compute view matrix and update matrix to shader program.
-			//C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_view, &this->viewMatrix);
-	
 			//Update to shader program.
 			C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_model, &modelMatrix);
 	

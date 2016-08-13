@@ -119,13 +119,13 @@ static inline std::string text(int row, int column, std::string message, u16 col
 	return ss.str();
 }
 
-static inline C3D_FQuat Quat_FromAxisAngle(C3D_FVec axis, float angle){
+static inline C3D_FQuat Quat_MyFromAxisAngle(C3D_FVec axis, float angle){
 	float halfAngle = angle / 2.0f;
 	float scale = std::sin(halfAngle);
 	return FVec4_New(axis.x * scale, axis.y * scale, axis.z * scale, std::cos(halfAngle));
 }
 
-static inline C3D_FQuat Quat_LookAt(C3D_FVec source, C3D_FVec target){
+static inline C3D_FQuat Quat_MyLookAt(C3D_FVec source, C3D_FVec target){
 	C3D_FVec forwardVector = FVec3_New(0.0f, 0.0f, 1.0f);
 	C3D_FVec upVector = FVec3_New(0.0f, 1.0f, 0.0f);
 	C3D_FVec forward = FVec3_Normalize(FVec3_Subtract(target, source));
@@ -138,7 +138,7 @@ static inline C3D_FQuat Quat_LookAt(C3D_FVec source, C3D_FVec target){
 	}
 	float rotationAngle = std::acos(dot);
 	C3D_FVec rotationAxis = FVec3_Normalize(FVec3_Cross(forwardVector, forward));
-	return Quat_FromAxisAngle(rotationAxis, rotationAngle);
+	return Quat_MyFromAxisAngle(rotationAxis, rotationAngle);
 }
 
 template <typename Type> std::string ToString(const Type& t){

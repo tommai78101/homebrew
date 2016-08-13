@@ -52,7 +52,7 @@ namespace Entity {
 		}
 	}
 
-	void GameObject::RenderUpdate(C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix){
+	void GameObject::RenderUpdate(bool cameraManipulateFlag, C3D_FVec cameraPosition, C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix){
 		//Convert quaternion to model matrix;
 		//Mtx_FromQuat(modelMatrix, this->rotation);
 		
@@ -60,6 +60,26 @@ namespace Entity {
 		//for (size_t i = 0; i < this->components.size(); i++) {
 		//	this->components[i]->RenderUpdate(viewMatrix, modelMatrix);
 		//}
+		
+		if (cameraManipulateFlag){
+			this->rotation = Quat_MyLookAt(this->position, cameraPosition);
+			
+			C3D_Mtx inverse;
+			Mtx_Copy(&inverse, &viewMatrix);                                           
+			Mtx_Inverse(&inverse);                
+			
+			//Doing the simplified calculations.
+			Mtx_Translate(modelMatrix, 0.0f, 0.0f, -3.0f, true);
+			Mtx_Multiply(modelMatrix, &inverse, modelMatrix);
+			
+			this->position = FVec4_New(modelMatrix->r[0].w, modelMatrix->r[1].w, modelMatrix->r[2].w, 1.0f);
+		}
+		else {
+			Mtx_Translate(modelMatrix, this->position.x, this->position.y, this->position.z, true);
+			C3D_Mtx rotationMatrix;
+			Mtx_FromQuat(&rotationMatrix, this->rotation);
+			Mtx_Multiply(modelMatrix, modelMatrix, &rotationMatrix);
+		}
 	}
 
 	void GameObject::ConfigureBuffer(){
