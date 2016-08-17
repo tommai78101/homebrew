@@ -20,6 +20,7 @@ namespace Entity {
 		C3D_FVec cameraPosition;
 
 		Player();
+		bool CheckDistance(GameObject* entity, const float threshold);
 		void Update(u32 downKey, u32 heldKey, u32 upKey, touchPosition touchInput);
 		void RenderUpdate(C3D_Mtx* viewMatrix);
 	};

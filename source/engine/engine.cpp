@@ -158,8 +158,8 @@ namespace Engine {
 			Mtx_Identity(&modelMatrix);
 
 			//At the moment, there's only 1 object in the scene. This allows the player to "pick" up the object(s) in hand, and manipulate them.
-			this->gameObjects[i]->RenderUpdate(this->player.cameraManipulateFlag, this->player.cameraPosition, this->viewMatrix, &modelMatrix);
-			
+			this->gameObjects[i]->RenderUpdate(this->player.CheckDistance(this->gameObjects[i].get(), 5.0f), this->player.cameraPosition, this->viewMatrix, &modelMatrix);				
+				
 			//Update to shader program.
 			C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_model, &modelMatrix);
 	

@@ -192,4 +192,9 @@ namespace Entity {
 		Mtx_RotateY(viewMatrix, this->rotationYaw, true);
 		Mtx_Translate(viewMatrix, -this->cameraPosition.x, 0.0f, -this->cameraPosition.z, true);
 	}
+	
+	bool Player::CheckDistance(GameObject* entity, const float threshold){
+		float distance = FVec4_Magnitude(FVec4_Subtract(entity->position, this->cameraPosition));
+		return threshold > distance && this->cameraManipulateFlag;
+	}
 };
