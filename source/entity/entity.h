@@ -11,7 +11,9 @@ namespace Entity {
 	
 	class GameObject {
 	public:
-		bool renderFlag, updateFlag;
+		bool renderFlag;
+		bool updateFlag;
+		bool isPickedUp;
 		void* vertexBuffer;
 		C3D_FVec position;
 		C3D_FVec scale;
@@ -26,7 +28,7 @@ namespace Entity {
 		virtual void Update();
 		virtual void Render();
 		void Release();
-		void RenderUpdate(bool cameraManipulateFlag, C3D_FVec cameraPosition, C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix);
+		void RenderUpdate(C3D_FVec cameraPosition, C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix);
 		void ConfigureBuffer();
 		
 		//Templates must go inside header files. This is the recommended method in C++.

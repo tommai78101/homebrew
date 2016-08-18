@@ -102,17 +102,28 @@ namespace Engine {
 	}
 
 	void Core::Update(u32 downKey, u32 heldKey, u32 upKey, touchPosition touch){
+		//Update the player.
 		this->player.Update(downKey, heldKey, upKey, touch);
 
 		for (size_t i = 0; i < this->gameObjects.size(); i++){
+			//This handles updating the game object's properties.
 			this->gameObjects[i]->Update();
+			
+			//This checks if the player is picking up the object within a set distance of 5 units away from the player. Else, we
+			//leave it alone.
+			if (this->player.CheckDistance(this->gameObjects[i].get(), 5.0f) && this->player.cameraManipulateFlag){
+				this->gameObjects[i]->isPickedUp = true;
+			}
+			else {
+				this->gameObjects[i]->isPickedUp = false;
+			}
 		}
 	}
 
 	void Core::Render(){
 		//Fetch Stereoscopic 3D level.
 		float slider = osGet3DSliderState();
-		//Inter Ocular Distance
+		//Inter Ocular Distance. We divide by 3.0f to reduce the 3D stereoscopic effects.
 		float iod = slider / 3.0f;
 
 		//Rendering scene
@@ -151,14 +162,14 @@ namespace Engine {
 	
 		//Draw the vertex buffer objects.                     
 		for (size_t i = 0; i < this->gameObjects.size(); i++) {
-			//Switch buffers
-			this->gameObjects[i]->ConfigureBuffer();
-	
 			//Calculate model view matrix.
 			Mtx_Identity(&modelMatrix);
 
+			//Switch game object buffers
+			this->gameObjects[i]->ConfigureBuffer();
+	
 			//At the moment, there's only 1 object in the scene. This allows the player to "pick" up the object(s) in hand, and manipulate them.
-			this->gameObjects[i]->RenderUpdate(this->player.CheckDistance(this->gameObjects[i].get(), 5.0f), this->player.cameraPosition, this->viewMatrix, &modelMatrix);				
+			this->gameObjects[i]->RenderUpdate(this->player.cameraPosition, this->viewMatrix, &modelMatrix);				
 				
 			//Update to shader program.
 			C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, this->uLoc_model, &modelMatrix);

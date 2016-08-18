@@ -187,14 +187,21 @@ namespace Entity {
 	}
 
 	void Player::RenderUpdate(C3D_Mtx* viewMatrix){
+		//Creating the rotation matrix from pitch, yaw, and roll values, with roll set to 0.0f for FPS camera.
+		C3D_Mtx rotationMatrix;
+		Mtx_FromQuat(&rotationMatrix, Quat_MyPitchYawRoll(this->rotationPitch, this->rotationYaw, 0.0f, false));
+		
+		//Applying the rotation matrix to the view matrix by matrix multiplication on the right hand side.
 		Mtx_Identity(viewMatrix);
-		Mtx_RotateX(viewMatrix, this->rotationPitch, true);			
-		Mtx_RotateY(viewMatrix, this->rotationYaw, true);
+		Mtx_Multiply(viewMatrix, viewMatrix, &rotationMatrix);
+		
+		//The bRightSide parameter at the end is mostly because we're doing multiplication as  (viewMatrix * cameraPosition). bRightSide refers to
+		//placing the factor (cameraPosition) on the right side of the product (viewMatrix), literally.
 		Mtx_Translate(viewMatrix, -this->cameraPosition.x, 0.0f, -this->cameraPosition.z, true);
 	}
 	
 	bool Player::CheckDistance(GameObject* entity, const float threshold){
 		float distance = FVec4_Magnitude(FVec4_Subtract(entity->position, this->cameraPosition));
-		return threshold > distance && this->cameraManipulateFlag;
+		return threshold > distance;
 	}
 };

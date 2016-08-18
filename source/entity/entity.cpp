@@ -22,6 +22,7 @@ namespace Entity {
 		this->position.x = this->position.y = this->position.z = 0.0f;
 		this->scale.x = this->scale.y = this->scale.z = 0.0f;
 		this->rotation = Quat_Identity();
+		this->isPickedUp = false;
 
 		//Entity-Component stuffs.
 		this->components.clear();
@@ -54,10 +55,10 @@ namespace Entity {
 		}
 	}
 
-	void GameObject::RenderUpdate(bool cameraManipulateFlag, C3D_FVec cameraPosition, C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix){
+	void GameObject::RenderUpdate(C3D_FVec cameraPosition, C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix){
 		//3D object pick-up.
-		if (cameraManipulateFlag){
-			//If true, allow the player to manipualte the object in the world.
+		if (this->isPickedUp){
+			//If true, allow the player to manipulate the object in the world.
 			
 			//Orient the object to face the camera when the object is picked up and held in the hands.
 			this->rotation = Quat_MyLookAt(this->position, cameraPosition);
