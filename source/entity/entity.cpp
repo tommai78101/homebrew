@@ -23,6 +23,7 @@ namespace Entity {
 		this->scale.x = this->scale.y = this->scale.z = 0.0f;
 		this->rotation = Quat_Identity();
 		this->isPickedUp = false;
+		this->debugFlag = false;
 
 		//Entity-Component stuffs.
 		this->components.clear();
@@ -56,6 +57,35 @@ namespace Entity {
 	}
 
 	void GameObject::RenderUpdate(C3D_FVec cameraPosition, C3D_Mtx& viewMatrix, C3D_Mtx* modelMatrix){
+		//If Debug Flag is set...
+		if (this->debugFlag){
+			//Orient the object to face the camera when the object is picked up and held in the hands.
+			this->rotation = Quat_MyLookAt(this->position, cameraPosition);
+			
+			//Creating an inverse matrix.
+			C3D_Mtx inverse;
+			Mtx_Copy(&inverse, &viewMatrix);                                           
+			Mtx_Inverse(&inverse);                
+			
+			//Doing the simplified calculations.
+			Mtx_Translate(modelMatrix, 0.0f, 0.0f, -3.0f, true);
+			Mtx_Multiply(modelMatrix, &inverse, modelMatrix);
+			Mtx_Scale(modelMatrix, 0.25f, 0.25f, 0.25f);
+			
+			//Decomposing the model matrix and obtaining the new object positions. See (Matrix Decomposition) for more info.
+			this->position = FVec4_New(modelMatrix->r[0].w, modelMatrix->r[1].w, modelMatrix->r[2].w, 1.0f);
+			
+			//Raycasting
+			C3D_FVec playerPosition = FVec4_New(inverse.r[0].w, inverse.r[1].w, inverse.r[2].w, 1.0f);
+			C3D_FVec raycastVector = FVec4_Subtract(this->position, playerPosition);
+			
+			text(18, 0, "                            ");
+			std::cout << "Raycast: " << raycastVector.x << "   " << raycastVector.y << "   " << raycastVector.z << "   " << raycastVector.w << std::endl;
+			
+			//We do not do anything after debugging.
+			return;
+		}
+		
 		//3D object pick-up.
 		if (this->isPickedUp){
 			//If true, allow the player to manipulate the object in the world.

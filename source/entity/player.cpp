@@ -17,6 +17,7 @@ namespace Entity {
 		this->counter = 0;
 		this->inversePitchFlag = false;
 		this->cameraManipulateFlag = false;
+		this->inHands = nullptr;
 	}
 
 	void Player::Update(u32 keyDown, u32 keyHeld, u32 keyUp, touchPosition touchInput){

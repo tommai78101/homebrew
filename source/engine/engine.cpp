@@ -84,7 +84,7 @@ namespace Engine {
 		//You first declare a component, with your edited values.
 		//Then you add them in via the helper function, AddComponent<T>(), passing in components as arguments.
 		//This can be extended to full class object initializations.
-		for (int i = 0; i < 1; i++){
+		for (int i = 0; i < 3; i++){
 			std::shared_ptr<GameObject> temp(new GameObject(vertexList, vertexListSize));
 			
 			//Physics Component initial setup.
@@ -92,10 +92,18 @@ namespace Engine {
 			temp->AddComponent<PhysicsComponent>(p);
 			
 			//Transform Component initial setup.
+			//Not sure what to do with Transform Component.
 			TransformComponent t;
-			t.position.x = 3.0f * i;
-			t.position.y = 5.0f * (i+1);
 			temp->AddComponent<TransformComponent>(t);
+			
+			//Setting up the initial positions for each game object.
+			temp->position.x = 3.0f * i;
+			temp->position.y = 5.0f * (i+1);
+			
+			//Debugging
+			if (i == 1){
+				temp->debugFlag = true;
+			}
 			
 			this->gameObjects.push_back(temp);
 		}
@@ -104,6 +112,17 @@ namespace Engine {
 	void Core::Update(u32 downKey, u32 heldKey, u32 upKey, touchPosition touch){
 		//Update the player.
 		this->player.Update(downKey, heldKey, upKey, touch);
+		
+		if (this->player.cameraManipulateFlag){
+			std::shared_ptr<GameObject> closestObject = this->GetClosestObjectToPosition(this->player.cameraPosition, 4.0f); 
+			if (closestObject != nullptr){
+				this->player.inHands = closestObject;
+				this->player.inHands->isPickedUp = true;
+			}
+			text(20, 0, "                              ");
+			std::cout << "Closest object? " << (closestObject != nullptr ? "True" : "False") << std::endl;
+		}
+		
 
 		for (size_t i = 0; i < this->gameObjects.size(); i++){
 			//This handles updating the game object's properties.
@@ -111,11 +130,9 @@ namespace Engine {
 			
 			//This checks if the player is picking up the object within a set distance of 5 units away from the player. Else, we
 			//leave it alone.
-			if (this->player.CheckDistance(this->gameObjects[i].get(), 5.0f) && this->player.cameraManipulateFlag){
-				this->gameObjects[i]->isPickedUp = true;
-			}
-			else {
+			if (!this->player.cameraManipulateFlag && this->gameObjects[i]->isPickedUp){
 				this->gameObjects[i]->isPickedUp = false;
+				this->player.inHands = nullptr;
 			}
 		}
 	}
@@ -185,5 +202,26 @@ namespace Engine {
 		//Free shader program
 		shaderProgramFree(&this->program);
 		DVLB_Free(this->vertexShader_dvlb);
+	}
+	
+	//------------------------------------------   Helper functions   ------------------------------------------
+	
+	std::shared_ptr<GameObject> Core::GetClosestObjectToPosition(C3D_FVec targetPosition, float maximumDistance){
+		std::shared_ptr<GameObject> result = nullptr;
+		//Setting the minimum distance value as the maximum distance value for accuracy.
+		float minimumDistance = maximumDistance; 
+		for (size_t i = 0; i < this->gameObjects.size(); i++){
+			if (this->gameObjects[i]->debugFlag){
+				//We skip game objects marked as debug objects. We don't want it to affect our calculations.
+				continue;
+			}
+			float checkDistance = FVec4_Magnitude(FVec4_Subtract(this->gameObjects[i]->position, targetPosition));
+			//It is rare for floating numbers to be equal to the other, but we put it there for math accuracy.
+			if (checkDistance <= maximumDistance && checkDistance < minimumDistance){
+				result = this->gameObjects[i];
+				minimumDistance = checkDistance;
+			}
+		}
+		return result;
 	}
 };

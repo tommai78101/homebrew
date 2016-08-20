@@ -18,11 +18,13 @@ namespace Entity {
 		s16 touchX, touchY, oldTouchX, oldTouchY, offsetTouchX, offsetTouchY;
 		u16 counter;
 		C3D_FVec cameraPosition;
+		std::shared_ptr<GameObject> inHands;
 
 		Player();
 		bool CheckDistance(GameObject* entity, const float threshold);
 		void Update(u32 downKey, u32 heldKey, u32 upKey, touchPosition touchInput);
 		void RenderUpdate(C3D_Mtx* viewMatrix);
+		
 	};
 };
 

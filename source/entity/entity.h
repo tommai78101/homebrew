@@ -14,10 +14,10 @@ namespace Entity {
 		bool renderFlag;
 		bool updateFlag;
 		bool isPickedUp;
+		bool debugFlag;
 		void* vertexBuffer;
 		C3D_FVec position;
 		C3D_FVec scale;
-		//float positionX, positionY, positionZ;
 		C3D_FQuat rotation;
 		u32 vertexListSize, listElementSize;
 		std::vector<std::shared_ptr<Component>> components;

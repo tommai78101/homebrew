@@ -46,6 +46,9 @@ namespace Engine {
 		void Release();
 		void SceneRender(float interOcularDistance);
 		void SceneExit();
+		
+		//Helper functions
+		std::shared_ptr<GameObject> GetClosestObjectToPosition(C3D_FVec targetPosition, float maximumDistance);
 	};
 };
 
