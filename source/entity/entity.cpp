@@ -76,11 +76,12 @@ namespace Entity {
 			this->position = FVec4_New(modelMatrix->r[0].w, modelMatrix->r[1].w, modelMatrix->r[2].w, 1.0f);
 			
 			//Raycasting
-			C3D_FVec playerPosition = FVec4_New(inverse.r[0].w, inverse.r[1].w, inverse.r[2].w, 1.0f);
-			C3D_FVec raycastVector = FVec4_Subtract(this->position, playerPosition);
+			C3D_FVec playerPosition = Extract_CamPos(&inverse);
+			C3D_FVec cameraForward = Extract_CamForward(&inverse);
 			
-			text(18, 0, "                            ");
-			std::cout << "Raycast: " << raycastVector.x << "   " << raycastVector.y << "   " << raycastVector.z << "   " << raycastVector.w << std::endl;
+			text(19, 0, "                                                               ");
+			std::cout << "Position: " << std::fixed << std::setprecision(2) << playerPosition.x << "  " << playerPosition.y << "  " << playerPosition.z << std::endl;
+			std::cout << "Forward : " << std::fixed << std::setprecision(2) << cameraForward.x << "  " << cameraForward.y << "  " << cameraForward.z << std::endl;
 			
 			//We do not do anything after debugging.
 			return;

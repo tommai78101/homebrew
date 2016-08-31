@@ -167,6 +167,22 @@ static inline C3D_FQuat Quat_MyPitchYawRoll(float pitch, float yaw, float roll, 
 	}
 }
 
+static inline C3D_FVec Extract_CamPos(C3D_Mtx* inversedViewMatrix){
+	return FVec4_New(inversedViewMatrix->r[0].w, inversedViewMatrix->r[1].w, inversedViewMatrix->r[2].w, 1.0f);
+}
+
+static inline C3D_FVec Extract_CamRight(C3D_Mtx* inversedViewMatrix){
+	return FVec4_New(inversedViewMatrix->r[0].x, inversedViewMatrix->r[1].x, inversedViewMatrix->r[2].x, 0.0f);
+}
+
+static inline C3D_FVec Extract_CamUp(C3D_Mtx* inversedViewMatrix){
+	return FVec4_New(inversedViewMatrix->r[0].y, inversedViewMatrix->r[1].y, inversedViewMatrix->r[2].y, 0.0f);
+}
+
+static inline C3D_FVec Extract_CamForward(C3D_Mtx* inversedViewMatrix){
+	return FVec4_New(inversedViewMatrix->r[0].z, inversedViewMatrix->r[1].z, -inversedViewMatrix->r[2].z, 0.0f);
+}
+
 template <typename Type> std::string ToString(const Type& t){
 	std::ostringstream os;
 	os << t;
